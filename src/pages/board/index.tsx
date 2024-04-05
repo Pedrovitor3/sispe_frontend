@@ -1,4 +1,4 @@
-import { Card, List } from 'antd';
+import { Button, Card, List } from 'antd';
 import { useEffect, useState } from 'react';
 import { getPerspectiva } from '../../hooks/services/axios/perspectivaService';
 import { getObjetivo } from '../../hooks/services/axios/objetivoService';
@@ -8,13 +8,19 @@ interface PerspectivaData {
   id: string;
   name: string;
 }
+
 interface ObjetivoData {
   id: string;
   name: string;
   perspectiva: PerspectivaData;
 }
 
-export default function Board() {
+type Props = {
+  setChave: (id: string) => void;
+  onObjetivoChange: (boletim: any) => void;
+};
+
+export default function Board({ setChave, onObjetivoChange }: Props) {
   const [perspectivas, setPerspectiva] = useState<PerspectivaData[]>([]);
   const [objetivos, setObjetivo] = useState<ObjetivoData[]>([]);
 
@@ -40,6 +46,11 @@ export default function Board() {
     }
   };
 
+  const handleObjetivoClick = (objetivo: ObjetivoData) => {
+    setChave('3');
+    onObjetivoChange(objetivo.id);
+  };
+
   return (
     <>
       <List
@@ -52,13 +63,19 @@ export default function Board() {
           <List.Item>
             <Card title={perspectiva.name}>
               <ul>
-                {objetivos
-                  .filter(
-                    objetivo => objetivo.perspectiva.id === perspectiva.id,
-                  )
-                  .map(objetivo => (
-                    <li key={objetivo.name}>{objetivo.name}</li>
-                  ))}
+                <a>
+                  {objetivos
+                    .filter(
+                      objetivo => objetivo.perspectiva.id === perspectiva.id,
+                    )
+                    .map(objetivo => (
+                      <li key={objetivo.name}>
+                        <a onClick={() => handleObjetivoClick(objetivo)}>
+                          {objetivo.name}
+                        </a>
+                      </li>
+                    ))}
+                </a>
               </ul>
             </Card>
           </List.Item>

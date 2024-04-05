@@ -31,6 +31,8 @@ import Title from 'antd/es/typography/Title';
 import { menus } from '../../components/Menus';
 import { removeParameterUrl } from '../../utils/UtilsSistema';
 import Board from '../board';
+import Estrategia from '../iniciativa';
+import Iniciativa from '../iniciativa';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -56,8 +58,8 @@ const Sistema: React.FC = () => {
     token: { colorBgContainer },
   } = theme.useToken();
   const [unidades, setUnidades] = useState([{ nome: '', codigo: 0 }]);
-  const [boletim, setBoletim] = useState<string>(''); // State for boletimId
-  const [blocoId, setBlocoId] = useState<string>(''); // State for blocoId
+  const [objetivo, setObjetivo] = useState<string>(''); // State for boletimId
+  const [estrategia, setEstrategia] = useState<string>(''); // State for blocoId
   const [openModalUnidade, setOpenModalUnidade] = useState(false);
   const [collapsed, setCollapsed] = useState(true);
   const [unidade, setUnidade] = useState<{
@@ -66,7 +68,7 @@ const Sistema: React.FC = () => {
   } | null>(null);
   const [itemsMenu, setItemsMenu] = useState<MenuItem[]>([]);
   const [visibleSensive, setVisibleSensive] = useState(false);
-  const [chave, setChave] = useState('4');
+  const [chave, setChave] = useState('2');
   const rotas = (item: any) => {
     setChave(item.key);
   };
@@ -180,12 +182,12 @@ const Sistema: React.FC = () => {
     setChave(id);
   };
 
-  const handleBoletimChange = (boletim: string) => {
-    setBoletim(boletim);
+  const handleObjetivoChange = (objetivo: string) => {
+    setObjetivo(objetivo);
   };
 
-  const handleBlocoIdChange = (id: string) => {
-    setBlocoId(id);
+  const handleEstrategiaChange = (id: string) => {
+    setEstrategia(id);
   };
 
   return (
@@ -358,12 +360,8 @@ const Sistema: React.FC = () => {
                 {
                   {
                     '1': <span>Dashboard</span>,
-                    '2': <span>Teste</span>,
-                    '3': <span>Teste / Teste children</span>,
-                    '4': <span>Boletim Geral</span>,
-                    '5': <span>Bloco</span>,
-                    '6': <span>Documentos</span>,
-                    '7': <span>Tipos</span>,
+                    '2': <span>Objetivo</span>,
+                    '3': <span>Iniciativas</span>,
                   }[chave]
                 }
               </Breadcrumb.Item>
@@ -376,7 +374,20 @@ const Sistema: React.FC = () => {
                 <>
                   {
                     {
-                      '4': <Board />, // Pass handleDemandIdChange as prop/>,
+                      '2': (
+                        <Board
+                          //funções para fazer alteração de pagina
+                          setChave={setChildrenMenu}
+                          onObjetivoChange={handleObjetivoChange}
+                        />
+                      ), // Pass handleBoletimChange as prop/>,
+                      '3': (
+                        <Iniciativa
+                          setChave={setChildrenMenu}
+                          onEstrategiaChange={handleEstrategiaChange}
+                          objetivo={objetivo}
+                        />
+                      ),
                     }[chave]
                   }
                 </>
