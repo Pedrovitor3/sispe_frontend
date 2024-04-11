@@ -74,7 +74,22 @@ export default function Iniciativa({
       const filterEstrategia = estrategia.filter((e: EstrategiaData) => {
         return e.objetivo?.id === objetivo;
       });
-      setEstrategia(filterEstrategia);
+
+      const sortedEstrategia = filterEstrategia.sort((a: any, b: any) => {
+        // Convertendo as datas para objetos Date para que possam ser comparadas
+        const dateA = new Date(a.created_at);
+        const dateB = new Date(b.created_at);
+        // Comparando as datas
+        if (dateA < dateB) {
+          return -1;
+        }
+        if (dateA > dateB) {
+          return 1;
+        }
+        return 0;
+      });
+
+      setEstrategia(sortedEstrategia);
     }
   };
 
@@ -113,6 +128,20 @@ export default function Iniciativa({
       m => m?.iniciativa?.id === record.id,
     );
 
+    const sortedEstrategia = filterMetaResource.sort((a: any, b: any) => {
+      // Convertendo as datas para objetos Date para que possam ser comparadas
+      const dateA = new Date(a.created_at);
+      const dateB = new Date(b.created_at);
+      // Comparando as datas
+      if (dateA < dateB) {
+        return -1;
+      }
+      if (dateA > dateB) {
+        return 1;
+      }
+      return 0;
+    });
+
     const columns: ColumnsType<MetaData> = [
       {
         title: 'Meta',
@@ -124,7 +153,7 @@ export default function Iniciativa({
       <Table
         rowKey={record => record.id}
         columns={columns}
-        dataSource={filterMetaResource}
+        dataSource={sortedEstrategia}
         pagination={false}
         expandable={{
           expandedRowRender: expandedRowRenderAcao,
@@ -145,6 +174,9 @@ export default function Iniciativa({
     const filteredAcao = acaoWithKeys.filter(
       acao => acao.meta?.id === record.id,
     );
+    const sortedacoes = filteredAcao.sort((a: any, b: any) => {
+      return parseInt(a.ano, 10) - parseInt(b.ano, 10);
+    });
 
     const columns: TableColumnsType<AcaoData> = [
       {
@@ -163,7 +195,7 @@ export default function Iniciativa({
       <Table
         rowKey={record => record.id}
         columns={columns}
-        dataSource={filteredAcao}
+        dataSource={sortedacoes}
         pagination={false}
         rowClassName={() => 'custom-table-destiny'}
         className="custom-table"
@@ -213,17 +245,20 @@ export default function Iniciativa({
             return ini.estrategia?.id === estrategia.id;
           },
         );
+        const sortedIniciativas = filteredIniciativas.sort((a: any, b: any) => {
+          return parseInt(a.item, 10) - parseInt(b.item, 10);
+        });
 
         return (
           <div key={estrategia?.id}>
             <p>{estrategia?.name}</p>
-            {filteredIniciativas.map((ini: IniciativasData) => (
+            {sortedIniciativas.map((ini: IniciativasData) => (
               <div key={ini?.id}></div>
             ))}
             <Table
               rowKey={record => record.id}
               columns={columns}
-              dataSource={filteredIniciativas}
+              dataSource={sortedIniciativas}
               pagination={false}
               expandable={{
                 expandedRowRender,

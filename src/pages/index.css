@@ -116,15 +116,12 @@
 }
 
 .icon-wrapper {
-  margin-left: 13px;
-  visibility: hidden !important;
-  font-size: 15px;
+  margin-right: 10px;
+  font-size: 17px;
   font-weight: 800;
 }
 
-.item-lista:hover .icon-wrapper {
-  visibility: visible !important ;
-}
+
 
 
 .item-lista :where(.css-dev-only-do-not-override-i0uh1t).ant-btn-primary:not(:disabled):hover {
@@ -197,3 +194,32 @@ th.ant-table-cell {
 }
 
 
+
+
+
+/* Estilização para os popovers */
+.ant-popover-inner {
+  background-color: rgb(255, 255, 255) !important; /* Fundo branco semitransparente */
+  border: none; /* Sem borda */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* Sombra leve */
+  border-radius: 8px; /* Borda arredondada */
+  padding: 12px !important; /* Espaçamento interno */
+}
+
+.ant-popover-title {
+  margin: 0; /* Removendo margem padrão */
+  color: #333; /* Cor do texto */
+  font-weight: bold; /* Texto em negrito */
+  text-align: center; /* Texto centralizado */
+}
+
+/* Estilização para os ícones dos popovers */
+.ant-popover-button {
+  padding: 6px; /* Espaçamento interno */
+}
+
+/* Estilização para o conteúdo dos popovers */
+.ant-popover-content {
+  margin-top: 8px; /* Margem superior */
+  color: #666; /* Cor do texto */
+}
