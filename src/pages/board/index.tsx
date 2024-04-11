@@ -66,7 +66,7 @@ export default function Board({ setChave, onObjetivoChange }: Props) {
                 <a>
                   {objetivos
                     .filter(
-                      objetivo => objetivo.perspectiva.id === perspectiva.id,
+                      objetivo => objetivo.perspectiva?.id === perspectiva.id,
                     )
                     .map(objetivo => (
                       <li key={objetivo.name}>
