@@ -1,10 +1,13 @@
-import { Table, TableColumnsType } from 'antd';
+import { Button, Popover, Table, TableColumnsType } from 'antd';
 import { useEffect, useState } from 'react';
 import { getEstrategia } from '../../hooks/services/axios/estrategiaService';
 import { getIniciativa } from '../../hooks/services/axios/iniciativaService';
 import { getAcao } from '../../hooks/services/axios/acaoService';
 import { getMeta } from '../../hooks/services/axios/metaService';
 import { ColumnsType } from 'antd/es/table';
+import ModalEstrategia from '../../components/Modal/ModalEstrategia';
+import { PlusOutlined } from '@ant-design/icons';
+import ModalIniciativa from '../../components/Modal/ModalIniciativa';
 require('../index.css');
 
 interface EstrategiaData {
@@ -46,12 +49,12 @@ interface AcaoData {
 
 type Props = {
   setChave: (id: string) => void;
-  objetivo: any;
+  objetivoId: any;
   onEstrategiaChange: (id: string) => void;
 };
 
 export default function Iniciativa({
-  objetivo,
+  objetivoId,
   setChave,
   onEstrategiaChange,
 }: Props) {
@@ -59,6 +62,14 @@ export default function Iniciativa({
   const [iniciativas, setIniciativas] = useState<IniciativasData[]>([]);
   const [meta, setMeta] = useState<MetaData[]>([]);
   const [acoes, setAcoes] = useState<AcaoData[]>([]);
+
+  const [recordEstrategia, setRecordEstrategia] = useState<any>({});
+
+  const [showIniciativaModal, setShowIniciativaModal] =
+    useState<boolean>(false);
+
+  const [showEstrategiaModal, setShowEstrategiaModal] =
+    useState<boolean>(false);
 
   useEffect(() => {
     loadingEstrategia();
@@ -72,7 +83,7 @@ export default function Iniciativa({
     if (response) {
       const estrategia = response.data;
       const filterEstrategia = estrategia.filter((e: EstrategiaData) => {
-        return e.objetivo?.id === objetivo;
+        return e.objetivo?.id === objetivoId;
       });
 
       const sortedEstrategia = filterEstrategia.sort((a: any, b: any) => {
@@ -115,6 +126,31 @@ export default function Iniciativa({
       const acao = response.data;
       setAcoes(acao);
     }
+  };
+
+  const hideModal = () => {
+    setShowEstrategiaModal(false);
+    setShowIniciativaModal(false);
+
+    setRecordEstrategia(null);
+  };
+
+  const handleOpenEstrategiaModal = () => {
+    setShowEstrategiaModal(true);
+  };
+
+  const handleOpenIniciativaModal = () => {
+    setShowIniciativaModal(true);
+  };
+
+  const updateEstrategia = (estrategia: any) => {
+    setEstrategia(prevEstrategia => [...prevEstrategia, estrategia]);
+    loadingEstrategia();
+  };
+
+  const updateIniciativa = (ini: any) => {
+    setEstrategia(prevIni => [...prevIni, ini]);
+    loadingIniciativa();
   };
 
   const expandedRowRender = (record: any) => {
@@ -239,6 +275,13 @@ export default function Iniciativa({
   ];
   return (
     <>
+      <Button
+        className="button-criar"
+        type="primary"
+        onClick={handleOpenEstrategiaModal}
+      >
+        Nova Estrategia
+      </Button>
       {estrategias.map((estrategia: EstrategiaData) => {
         const filteredIniciativas = iniciativas.filter(
           (ini: IniciativasData) => {
@@ -251,7 +294,30 @@ export default function Iniciativa({
 
         return (
           <div key={estrategia?.id}>
-            <p>{estrategia?.name}</p>
+            <h2
+              className="title-estrategia"
+              style={{ marginRight: 'auto', position: 'relative' }}
+            >
+              {estrategia?.name}
+
+              <Popover title="Adcionar objetivo">
+                <Button
+                  style={{
+                    color: 'white',
+                    fontSize: '22px',
+                    position: 'absolute',
+                    bottom: '7px',
+                    right: '10px',
+                  }}
+                  type="text"
+                  icon={<PlusOutlined />}
+                  onClick={() => {
+                    setRecordEstrategia(estrategia);
+                    handleOpenIniciativaModal();
+                  }}
+                />
+              </Popover>
+            </h2>
             {sortedIniciativas.map((ini: IniciativasData) => (
               <div key={ini?.id}></div>
             ))}
@@ -270,6 +336,20 @@ export default function Iniciativa({
           </div>
         );
       })}
+      <ModalEstrategia
+        updatedEstrategiaList={updateEstrategia}
+        id={''}
+        objetivoId={objetivoId}
+        openModal={showEstrategiaModal}
+        closeModal={hideModal}
+      />
+      <ModalIniciativa
+        updatedIniciativaList={updateIniciativa}
+        id={''}
+        estrategiaId={recordEstrategia?.id}
+        openModal={showIniciativaModal}
+        closeModal={hideModal}
+      />
     </>
   );
 }

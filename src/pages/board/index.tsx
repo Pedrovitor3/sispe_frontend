@@ -16,6 +16,7 @@ import {
 import { getObjetivo } from '../../hooks/services/axios/objetivoService';
 import ModalPerspectiva from '../../components/Modal/ModalPerspectiva';
 import { EditOutlined, MoreOutlined, PlusOutlined } from '@ant-design/icons';
+import ModalObjetivo from '../../components/Modal/ModalObjetivo';
 require('../index.css');
 
 interface PerspectivaData {
@@ -36,9 +37,12 @@ type Props = {
 
 export default function Board({ setChave, onObjetivoChange }: Props) {
   const [perspectivas, setPerspectiva] = useState<PerspectivaData[]>([]);
-  const [recordPerspectiva, setRecordPerspectiva] = useState<any>({});
-
   const [objetivos, setObjetivo] = useState<ObjetivoData[]>([]);
+
+  const [recordPerspectiva, setRecordPerspectiva] = useState<any>({});
+  const [recordObjetivo, setRecordObjetivo] = useState<any>({});
+
+  const [showObjetivoModal, setShowObjetivoModal] = useState<boolean>(false);
   const [showPerspectivaModal, setShowPerspectivaModal] =
     useState<boolean>(false);
 
@@ -48,7 +52,10 @@ export default function Board({ setChave, onObjetivoChange }: Props) {
 
   const hideModal = () => {
     setShowPerspectivaModal(false);
+    setShowObjetivoModal(false);
+
     setRecordPerspectiva(null);
+    setRecordObjetivo(null);
   };
   const handleObjetivoClick = (objetivo: ObjetivoData) => {
     setChave('3');
@@ -59,8 +66,17 @@ export default function Board({ setChave, onObjetivoChange }: Props) {
     setShowPerspectivaModal(true);
   };
 
+  const handleOpenObjetivoModal = () => {
+    setShowObjetivoModal(true);
+  };
+
   const updatePerspectiva = (perspectivas: any) => {
     setPerspectiva(prevPers => [...prevPers, perspectivas]);
+    loadingPerspectiva();
+  };
+
+  const updateObjetivo = (obj: any) => {
+    setPerspectiva(prevObj => [...prevObj, obj]);
     loadingPerspectiva();
   };
 
@@ -73,15 +89,18 @@ export default function Board({ setChave, onObjetivoChange }: Props) {
       });
       setPerspectiva(sortedPerspectiva);
       // Carrega os objetivos após o carregamento das perspectivas
-      loadingObjetivo(perspectiva);
+      loadingObjetivo();
     }
   };
 
-  const loadingObjetivo = async (perspectivas: PerspectivaData[]) => {
+  const loadingObjetivo = async () => {
     const response = await getObjetivo('objetivo');
     if (response) {
       const objetivo = response.data;
-      setObjetivo(objetivo);
+      const sortedObjetivo = objetivo.sort((a: any, b: any) => {
+        return parseInt(a.position, 10) - parseInt(b.position, 10);
+      });
+      setObjetivo(sortedObjetivo);
     }
   };
 
@@ -166,7 +185,8 @@ export default function Board({ setChave, onObjetivoChange }: Props) {
                       type="text"
                       icon={<PlusOutlined />}
                       onClick={() => {
-                        // Função para lidar com a adição
+                        setRecordPerspectiva(perspectiva);
+                        handleOpenObjetivoModal();
                       }}
                     />
                   </Popover>
@@ -198,6 +218,14 @@ export default function Board({ setChave, onObjetivoChange }: Props) {
         id={recordPerspectiva?.id}
         openModal={showPerspectivaModal}
         closeModal={hideModal}
+      />
+
+      <ModalObjetivo
+        updatedObjetivoList={updateObjetivo}
+        id={recordObjetivo?.id}
+        openModal={showObjetivoModal}
+        closeModal={hideModal}
+        perspectivaId={recordPerspectiva?.id}
       />
     </>
   );

@@ -58,7 +58,7 @@ const Sistema: React.FC = () => {
     token: { colorBgContainer },
   } = theme.useToken();
   const [unidades, setUnidades] = useState([{ nome: '', codigo: 0 }]);
-  const [objetivo, setObjetivo] = useState<string>(''); // State for boletimId
+  const [objetivo, setObjetivoId] = useState<string>(''); // State for boletimId
   const [estrategia, setEstrategia] = useState<string>(''); // State for blocoId
   const [openModalUnidade, setOpenModalUnidade] = useState(false);
   const [collapsed, setCollapsed] = useState(true);
@@ -182,8 +182,8 @@ const Sistema: React.FC = () => {
     setChave(id);
   };
 
-  const handleObjetivoChange = (objetivo: string) => {
-    setObjetivo(objetivo);
+  const handleObjetivoChange = (id: string) => {
+    setObjetivoId(id);
   };
 
   const handleEstrategiaChange = (id: string) => {
@@ -385,7 +385,7 @@ const Sistema: React.FC = () => {
                         <Iniciativa
                           setChave={setChildrenMenu}
                           onEstrategiaChange={handleEstrategiaChange}
-                          objetivo={objetivo}
+                          objetivoId={objetivo}
                         />
                       ),
                     }[chave]
