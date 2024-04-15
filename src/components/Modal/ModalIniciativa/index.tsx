@@ -26,7 +26,7 @@ const ModalIniciativa = ({
   const [form] = Form.useForm();
   const [iniciativas, setIniciativas] = useState<any>([]);
 
-  console.log('obj Id', estrategiaId);
+  console.log('estrategias Id', estrategiaId);
 
   const handleOk = (e: any) => {
     e.preventDefault();
@@ -69,7 +69,7 @@ const ModalIniciativa = ({
             name: iniciativa.name,
             item: iniciativa.item,
             status: iniciativa.status,
-            percentual: iniciativa.percentualExecutado,
+            percentualExecutado: iniciativa.percentualExecutado,
             objetivo: iniciativas.objetivo ? iniciativas.objetivo.id : null,
           });
         } else {
