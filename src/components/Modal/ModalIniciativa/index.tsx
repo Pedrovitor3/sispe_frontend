@@ -157,7 +157,7 @@ const ModalIniciativa = ({
               },
             ]}
           >
-            <Input type="number" />
+            <Input type="number" max={100} min={0} />
           </Form.Item>
         </Col>
       </Form>

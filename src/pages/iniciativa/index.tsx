@@ -16,13 +16,16 @@ import {
   deleteIniciativa,
   getIniciativa,
 } from '../../hooks/services/axios/iniciativaService';
-import { getAcao } from '../../hooks/services/axios/acaoService';
+import { deleteAcao, getAcao } from '../../hooks/services/axios/acaoService';
 import { getMeta } from '../../hooks/services/axios/metaService';
 import { ColumnsType } from 'antd/es/table';
 import ModalEstrategia from '../../components/Modal/ModalEstrategia';
 import { DownOutlined, PlusOutlined } from '@ant-design/icons';
 import ModalIniciativa from '../../components/Modal/ModalIniciativa';
 import ModalMeta from '../../components/Modal/ModalMeta';
+import ModalAcao from '../../components/Modal/ModalAcao';
+
+require('./index.css');
 
 interface EstrategiaData {
   id: string;
@@ -80,8 +83,10 @@ export default function Iniciativa({
   const [recordEstrategia, setRecordEstrategia] = useState<any>({});
   const [recordIniciativa, setRecordIniciativa] = useState<any>({});
   const [recordMeta, setRecordMeta] = useState<any>({});
+  const [recordAcao, setRecordAcao] = useState<any>({});
 
   const [showMetaModal, setShowMetaModal] = useState<boolean>(false);
+  const [showAcaoModal, setShowAcaoModal] = useState<boolean>(false);
   const [showIniciativaModal, setShowIniciativaModal] =
     useState<boolean>(false);
 
@@ -90,8 +95,6 @@ export default function Iniciativa({
 
   useEffect(() => {
     loadingEstrategia();
-    loadingAcao();
-    loadingMeta();
   }, []);
 
   const loadingEstrategia = async () => {
@@ -130,22 +133,31 @@ export default function Iniciativa({
       });
 
       setIniciativas(filteredIniciativas);
+      loadingMeta(filteredIniciativas);
     }
   };
 
-  const loadingMeta = async () => {
+  const loadingMeta = async (iniciativaData: IniciativasData[]) => {
     const response = await getMeta('meta');
     if (response) {
       const meta = response.data;
-      setMeta(meta);
+      const filteredMeta = meta.filter((m: MetaData) => {
+        return iniciativaData.some(ini => m.iniciativa?.id === ini.id);
+      });
+
+      setMeta(filteredMeta);
+      loadingAcao(filteredMeta);
     }
   };
 
-  const loadingAcao = async () => {
+  const loadingAcao = async (metaData: MetaData[]) => {
     const response = await getAcao('acao');
     if (response) {
       const acao = response.data;
-      setAcoes(acao);
+      const filteredAcao = acao.filter((a: AcaoData) => {
+        return metaData.some(meta => a.meta?.id === meta.id);
+      });
+      setAcoes(filteredAcao);
     }
   };
 
@@ -153,10 +165,12 @@ export default function Iniciativa({
     setShowEstrategiaModal(false);
     setShowIniciativaModal(false);
     setShowMetaModal(false);
+    setShowAcaoModal(false);
 
     setRecordEstrategia(null);
     setRecordIniciativa(null);
     setRecordMeta(null);
+    setRecordAcao(null);
   };
 
   const handleOpenEstrategiaModal = () => {
@@ -178,6 +192,10 @@ export default function Iniciativa({
 
   const updateMeta = (meta: any) => {
     setMeta(prevMeta => [...prevMeta, meta]);
+    loadingEstrategia();
+  };
+  const updateAcao = (acao: any) => {
+    setMeta(prevAcao => [...prevAcao, acao]);
     loadingEstrategia();
   };
 
@@ -204,6 +222,13 @@ export default function Iniciativa({
     setMeta(newData);
     loadingEstrategia();
   };
+  const clickDeleteAcao = async (acaoId: any) => {
+    await deleteAcao(acaoId);
+    const newData = [...acoes];
+    newData.splice(acaoId, -1);
+    setAcoes(newData);
+    loadingEstrategia();
+  };
 
   const handleMenuClickEstrategia: MenuProps['onClick'] = e => {
     if (e.key === '2') {
@@ -225,7 +250,12 @@ export default function Iniciativa({
     if (e.key === '2') {
       setShowMetaModal(true);
     } else if (e.key === '3') {
-      setShowMetaModal(true);
+      setShowAcaoModal(true);
+    }
+  };
+  const handleMenuClickAcao: MenuProps['onClick'] = e => {
+    if (e.key === '2') {
+      setShowAcaoModal(true);
     }
   };
 
@@ -244,20 +274,22 @@ export default function Iniciativa({
       {
         title: 'Item',
         dataIndex: 'item',
+        width: '10%',
       },
       {
         title: 'Iniciativas',
         dataIndex: 'name',
-        width: '20%',
+        width: '40%',
       },
       {
         title: 'Porcentagem Executada',
         dataIndex: 'percentualExecutado',
-        width: '20%',
+        render: (value: number) => `${value} %`,
       },
       {
         title: 'Ação',
         key: 'operation',
+        width: '15%',
         render: (record: any) => {
           return (
             <Space size="middle">
@@ -321,7 +353,7 @@ export default function Iniciativa({
         expandable={{
           expandedRowRender: expandedRowRenderMeta,
         }}
-        rowClassName={() => 'custom-table'}
+        rowClassName={() => 'custom-table-destiny'}
         className="custom-table"
       />
     );
@@ -329,8 +361,8 @@ export default function Iniciativa({
 
   const expandedRowRenderMeta = (record: any) => {
     //adicionar uma chave única para cada entrega usando o índice
-    const metaWithKeys = metas.map((acao, index) => ({
-      ...acao,
+    const metaWithKeys = metas.map((meta, index) => ({
+      ...meta,
       key: `acao${index}`,
     }));
     // filtra as entregas vinculados com fundo a funso
@@ -338,20 +370,16 @@ export default function Iniciativa({
       meta => meta.iniciativa?.id === record.id,
     );
 
-    console.log('aaa', record);
-    const sortedMeta = filteredMeta.sort((a: any, b: any) => {
-      return parseInt(a.ano, 10) - parseInt(b.ano, 10);
-    });
-
     const columns: TableColumnsType<MetaData> = [
       {
-        title: 'Nome',
+        title: 'Meta',
         dataIndex: 'name',
         key: 'name',
       },
       {
         title: 'Ação',
         key: 'operation',
+        width: '10%',
         render: (record: any) => {
           return (
             <Space size="middle">
@@ -381,7 +409,7 @@ export default function Iniciativa({
                       label: (
                         <Space style={{ color: ' rgb(0, 21, 42)' }}>
                           <PlusOutlined style={{ color: 'rgb(0, 21, 42)' }} />
-                          Meta
+                          Ação
                         </Space>
                       ),
                       key: '3',
@@ -410,7 +438,134 @@ export default function Iniciativa({
       <Table
         rowKey={record => record.id}
         columns={columns}
-        dataSource={sortedMeta}
+        dataSource={filteredMeta}
+        expandable={{
+          expandedRowRender: expandedRowRenderAcao,
+        }}
+        pagination={false}
+        rowClassName={() => 'custom-table'}
+        className="custom-table"
+      />
+    );
+  };
+
+  const expandedRowRenderAcao = (record: any) => {
+    //adicionar uma chave única para cada entrega usando o índice
+    const acaoWithKeys = acoes.map((acao, index) => ({
+      ...acao,
+      key: `acao${index}`,
+    }));
+    // filtra as entregas vinculados com fundo a funso
+    const filteredAcao = acaoWithKeys.filter(
+      acao => acao.meta?.id === record.id,
+    );
+
+    const sortedAcao = filteredAcao.sort((a: any, b: any) => {
+      return parseInt(a.ano, 10) - parseInt(b.ano, 10);
+    });
+
+    const columns: TableColumnsType<AcaoData> = [
+      {
+        title: 'Ano',
+        dataIndex: 'ano',
+        key: 'ano',
+        width: '6%',
+      },
+      {
+        title: 'Ação',
+        dataIndex: 'name',
+        key: 'name',
+        width: '20%',
+      },
+      {
+        title: 'Status',
+        dataIndex: 'status',
+        key: 'status',
+        width: '10%',
+      },
+      {
+        title: 'Percentual Executado',
+        dataIndex: 'percentualExecutado',
+        key: 'percentualExecutado',
+        width: '7%',
+        render: (value: number) => `${value} %`,
+      },
+      {
+        title: 'Justificativa',
+        dataIndex: 'justificativa',
+        key: 'justificativa',
+        width: '10%',
+      },
+      {
+        title: 'Observação',
+        dataIndex: 'observacao',
+        key: 'observacao',
+        width: '10%',
+      },
+      {
+        title: 'Entraves',
+        dataIndex: 'entraves',
+        key: 'entraves',
+        width: '10%',
+      },
+      {
+        title: 'Departamento Responsavel',
+        dataIndex: 'departamentoResponsavel',
+        key: 'departamentoResponsavel',
+        width: '15%',
+      },
+
+      {
+        title: 'Ação',
+        key: 'operation',
+        width: '10%',
+        render: (record: any) => {
+          return (
+            <Space size="middle">
+              <Dropdown
+                menu={{
+                  items: [
+                    {
+                      label: (
+                        <Popconfirm
+                          title="Tem certeza de que deseja desabilitar este registro?"
+                          onConfirm={() => clickDeleteAcao(record.id)}
+                        >
+                          Excluir
+                        </Popconfirm>
+                      ),
+                      key: '1',
+                      danger: true,
+                    },
+                    {
+                      label: 'Alterar',
+                      key: '2',
+                      onClick: () => {
+                        setRecordAcao(record);
+                      },
+                    },
+                  ],
+                  onClick: handleMenuClickAcao,
+                }}
+              >
+                <a onClick={e => e.preventDefault()} className="option">
+                  <Space>
+                    Mais
+                    <DownOutlined />
+                  </Space>
+                </a>
+              </Dropdown>
+            </Space>
+          );
+        },
+      },
+    ];
+
+    return (
+      <Table
+        rowKey={record => record.id}
+        columns={columns}
+        dataSource={sortedAcao}
         pagination={false}
         rowClassName={() => 'custom-table'}
         className="custom-table"
@@ -422,11 +577,11 @@ export default function Iniciativa({
     {
       title: 'Estrategia',
       dataIndex: 'name',
-      width: '10%',
     },
     {
       title: 'Ação',
       key: 'operation',
+      width: '20%',
       render: (record: any) => {
         return (
           <Space size="middle">
@@ -498,20 +653,18 @@ export default function Iniciativa({
         Nova Estrategia
       </Button>
 
-      <div>
-        <Table
-          rowKey={record => record.id}
-          columns={columns}
-          dataSource={estrategias}
-          pagination={false}
-          expandable={{
-            expandedRowRender,
-            defaultExpandedRowKeys: ['0'],
-          }}
-          rowClassName={() => 'custom-table-row'}
-          className="custom-table"
-        />
-      </div>
+      <Table
+        rowKey={record => record.id}
+        columns={columns}
+        dataSource={estrategias}
+        expandable={{
+          expandedRowRender,
+          defaultExpandedRowKeys: ['0'],
+        }}
+        pagination={false}
+        rowClassName={() => 'custom-table-row'}
+        className="custom-table"
+      />
 
       <ModalEstrategia
         updatedEstrategiaList={updateEstrategia}
@@ -532,6 +685,13 @@ export default function Iniciativa({
         id={recordMeta?.id}
         iniciativaId={recordIniciativa?.id}
         openModal={showMetaModal}
+        closeModal={hideModal}
+      />
+      <ModalAcao
+        updatedAcaoList={updateAcao}
+        id={recordAcao?.id}
+        metaId={recordMeta?.id}
+        openModal={showAcaoModal}
         closeModal={hideModal}
       />
     </>

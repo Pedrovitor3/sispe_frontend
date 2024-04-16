@@ -1,0 +1,24 @@
+/* Ajuste o posicionamento da tabela */
+.custom-table-container {
+  margin-top: 20px; /* Espaço entre a parte superior da tabela e outros elementos acima */
+}
+
+/* Garanta que a tabela esteja sempre visível */
+.custom-table-wrapper {
+  overflow-x: auto; /* Adiciona rolagem horizontal caso a tabela seja maior que a largura do contêiner */
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px; /* Espaço entre a tabela e outros elementos abaixo */
+}
+
+.custom-table th,
+.custom-table td {
+  padding: 16px !important; /* Espaçamento interno das células */
+  color: black;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+}
+

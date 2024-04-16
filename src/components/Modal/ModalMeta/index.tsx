@@ -71,7 +71,6 @@ const ModalMeta = ({
 
   const submitCreate = async () => {
     const editingData = form.getFieldsValue(true);
-    console.log('iniciativas', editingData);
     await postMeta(editingData);
 
     updatedMetaList(editingData);
@@ -87,7 +86,7 @@ const ModalMeta = ({
   return (
     <Modal
       visible={openModal}
-      title="Iniciativa"
+      title="Meta"
       okText="Salvar"
       onCancel={() => {
         form.resetFields();
