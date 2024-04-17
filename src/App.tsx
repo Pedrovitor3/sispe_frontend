@@ -13,7 +13,7 @@ function App() {
         token: {
           colorPrimary: 'rgb(0, 21, 42)',
           colorLink: '#white',
-          colorLinkHover: 'rgb(134, 142, 151)',
+          colorLinkHover: 'rgb(0, 0, 0)',
           borderRadius: 3,
           colorTextHeading: 'rgb(0,21,42)',
         },

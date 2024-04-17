@@ -4,6 +4,35 @@
   background-color: red;
 }
 
+/*     Estilos   */
+
+.container-body-card{
+  display: flex;
+  align-items: center;
+}
+
+
+
+.objetivo-title{
+  font-size: 15px;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 2;
+  color: rgba(36, 34, 34, 0.733);
+}
+
+.objetivo-title:hover{
+ color: rgb(0, 0, 0);
+}
+
+
+
+/* CARD   */
+.ant-card-body{
+  padding: 18px !important;
+}
+
+
+
 /* Buttons */
 :where(.css-i0uh1t).ant-btn-primary:not(:disabled):hover {
   color: aliceblue !important;
@@ -29,8 +58,21 @@
 /*----------Icon------------------------*/
 
 .icon-wrapper {
-  margin-right: 10px;
-  font-size: 17px;
+  font-size: 14px;
   font-weight: 800;
+}
+
+
+.icon-wrapper-objetivo {
+  margin-left: 20px;
+  font-size: 14px;
+  font-weight: 800;
+  visibility: hidden;
+}
+
+
+
+.container-body-card:hover .icon-wrapper-objetivo{
+  visibility: visible;
 }
 

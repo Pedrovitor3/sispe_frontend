@@ -13,9 +13,17 @@ import {
   deletePerspectiva,
   getPerspectiva,
 } from '../../hooks/services/axios/perspectivaService';
-import { getObjetivo } from '../../hooks/services/axios/objetivoService';
+import {
+  deleteObjetivo,
+  getObjetivo,
+} from '../../hooks/services/axios/objetivoService';
 import ModalPerspectiva from '../../components/Modal/ModalPerspectiva';
-import { EditOutlined, MoreOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  DownOutlined,
+  EditOutlined,
+  MoreOutlined,
+  PlusOutlined,
+} from '@ant-design/icons';
 import ModalObjetivo from '../../components/Modal/ModalObjetivo';
 require('../index.css');
 
@@ -84,39 +92,64 @@ export default function Board({ setChave, onObjetivoChange }: Props) {
     const response = await getPerspectiva('perspectiva');
     if (response) {
       const perspectiva = response.data;
+
       const sortedPerspectiva = perspectiva.sort((a: any, b: any) => {
         return parseInt(a.position, 10) - parseInt(b.position, 10);
       });
       setPerspectiva(sortedPerspectiva);
       // Carrega os objetivos após o carregamento das perspectivas
-      loadingObjetivo();
+      loadingObjetivo(sortedPerspectiva);
     }
   };
 
-  const loadingObjetivo = async () => {
+  const loadingObjetivo = async (perspectivaData: PerspectivaData[]) => {
     const response = await getObjetivo('objetivo');
     if (response) {
       const objetivo = response.data;
-      const sortedObjetivo = objetivo.sort((a: any, b: any) => {
+
+      const filteredObjetivos = objetivo.filter((obj: ObjetivoData) => {
+        return perspectivaData.some(pers => obj.perspectiva?.id === pers.id);
+      });
+
+      const sortedObjetivo = filteredObjetivos.sort((a: any, b: any) => {
         return parseInt(a.position, 10) - parseInt(b.position, 10);
       });
       setObjetivo(sortedObjetivo);
     }
   };
 
-  const clickDeletePerspectiva = async (record: PerspectivaData) => {
-    await deletePerspectiva(record.id);
-    updatePerspectiva(record);
-    message.warning('Perspectiva excluida');
+  const clickDeletePerspectiva = async (perspectiva: any) => {
+    const perspectivaId = perspectiva?.id;
+    await deletePerspectiva(perspectivaId);
+    const newData = [...perspectivas];
+    newData.splice(perspectivaId, -1);
+    setPerspectiva(newData);
+    loadingPerspectiva();
   };
 
-  const handleMenuClick = (e: any) => {
+  const clickDeleteObjetivo = async (objId: any) => {
+    await deleteObjetivo(objId);
+    const newData = [...objetivos];
+    newData.splice(objId, -1);
+    setObjetivo(newData);
+    loadingPerspectiva();
+  };
+
+  const handleMenuClickPerspectiva = (e: any) => {
     if (e.key === '1') {
       setShowPerspectivaModal(true);
     }
+    if (e.key === '3') {
+      setShowObjetivoModal(true);
+    }
+  };
+  const handleMenuClickObjetivo = (e: any) => {
+    if (e.key === '1') {
+      setShowObjetivoModal(true);
+    }
   };
 
-  const renderMenu = (record: PerspectivaData) => {
+  const renderMenuPerspectiva = (record: PerspectivaData) => {
     return (
       <Space size="middle">
         <Dropdown
@@ -141,8 +174,59 @@ export default function Board({ setChave, onObjetivoChange }: Props) {
                 key: '2',
                 danger: true,
               },
+              {
+                label: (
+                  <Space style={{ color: ' rgb(0, 21, 42)' }}>
+                    <PlusOutlined style={{ color: 'rgb(0, 21, 42)' }} />
+                    Objetivo
+                  </Space>
+                ),
+                key: '3',
+                onClick: () => {
+                  setRecordPerspectiva(record);
+                },
+              },
             ],
-            onClick: handleMenuClick,
+            onClick: handleMenuClickPerspectiva,
+          }}
+        >
+          <a onClick={e => e.preventDefault()} className="option">
+            <Space>
+              <DownOutlined />
+            </Space>
+          </a>
+        </Dropdown>
+      </Space>
+    );
+  };
+
+  const renderMenuObjetivo = (record: ObjetivoData) => {
+    return (
+      <Space size="middle">
+        <Dropdown
+          menu={{
+            items: [
+              {
+                label: 'Alterar',
+                key: '1',
+                onClick: () => {
+                  setRecordObjetivo(record);
+                },
+              },
+              {
+                label: (
+                  <Popconfirm
+                    title="Tem certeza de que deseja desabilitar este registro?"
+                    onConfirm={() => clickDeleteObjetivo(record?.id)}
+                  >
+                    Excluir
+                  </Popconfirm>
+                ),
+                key: '2',
+                danger: true,
+              },
+            ],
+            onClick: handleMenuClickObjetivo,
           }}
         >
           <a onClick={e => e.preventDefault()} className="option">
@@ -177,36 +261,33 @@ export default function Board({ setChave, onObjetivoChange }: Props) {
               extra={
                 <>
                   <span className="icon-wrapper">
-                    {renderMenu(perspectiva)}
+                    {renderMenuPerspectiva(perspectiva)}
                   </span>
-
-                  <Popover title="Adcionar objetivo">
-                    <Button
-                      type="text"
-                      icon={<PlusOutlined />}
-                      onClick={() => {
-                        setRecordPerspectiva(perspectiva);
-                        handleOpenObjetivoModal();
-                      }}
-                    />
-                  </Popover>
                 </>
               }
             >
               <ul>
-                <a>
+                <div>
                   {objetivos
                     .filter(
                       objetivo => objetivo.perspectiva?.id === perspectiva.id,
                     )
                     .map(objetivo => (
                       <li key={objetivo.name}>
-                        <a onClick={() => handleObjetivoClick(objetivo)}>
-                          {objetivo.name}
-                        </a>
+                        <div className="container-body-card">
+                          <a
+                            className="objetivo-title"
+                            onClick={() => handleObjetivoClick(objetivo)}
+                          >
+                            {objetivo.name}
+                          </a>
+                          <span className="icon-wrapper-objetivo">
+                            {renderMenuObjetivo(objetivo)}
+                          </span>
+                        </div>
                       </li>
                     ))}
-                </a>
+                </div>
               </ul>
             </Card>
           </List.Item>
