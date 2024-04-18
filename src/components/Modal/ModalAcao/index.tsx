@@ -134,7 +134,7 @@ const ModalAcao = ({
               rules={[
                 {
                   pattern: /^(19|20)\d{2}$/,
-                  message: 'Por favor, insira um ano válido (exemplo: 2024)',
+                  message: 'Insira um ano válido (exemplo: 2024)',
                 },
               ]}
             >
@@ -173,7 +173,6 @@ const ModalAcao = ({
             <Form.Item name="entraves" label="Entravess">
               <Input.TextArea autoSize={{ minRows: 2, maxRows: 3 }} />
             </Form.Item>
-            <Form.Item initialValue={metaId} hidden />
           </Col>
         </Row>
         <Row gutter={30}>
@@ -200,6 +199,7 @@ const ModalAcao = ({
             </Form.Item>
           </Col>
         </Row>
+        <Form.Item initialValue={metaId} hidden />
       </Form>
     </Modal>
   );
