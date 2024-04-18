@@ -8,6 +8,8 @@ import {
   updateAcao,
 } from '../../../hooks/services/axios/acaoService';
 
+import DateFormItem from '../../Input/DateFormItem';
+
 type Props = {
   updatedAcaoList: any;
   id: string;
@@ -67,6 +69,12 @@ const ModalAcao = ({
             justificativa: acao.justificativa,
             observacao: acao.observacao,
             entraves: acao.entraves,
+
+            inicioPrevisto: acao.inicioPrevisto,
+            terminoPrevisto: acao.terminoPrevisto,
+            inicioReal: acao.inicioReal,
+            terminoReal: acao.terminoReal,
+
             meta: acao.meta ? acao.meta.id : null,
           });
         } else {
@@ -100,11 +108,11 @@ const ModalAcao = ({
         closeModal(true);
       }}
       onOk={handleOk}
-      width={800}
+      width={900}
     >
       <Form layout="vertical" form={form}>
         <Row gutter={30}>
-          <Col offset={1} span={15}>
+          <Col offset={1} span={12}>
             <Form.Item
               name="name"
               label="Nome"
@@ -118,15 +126,11 @@ const ModalAcao = ({
               <Input />
             </Form.Item>
           </Col>
-          <Col span={6}>
+          <Col span={5}>
             <Form.Item
               name="ano"
               label="Ano"
               rules={[
-                {
-                  required: true,
-                  message: 'Por favor, insira uma data',
-                },
                 {
                   pattern: /^(19|20)\d{2}$/,
                   message: 'Por favor, insira um ano válido (exemplo: 2024)',
@@ -136,65 +140,65 @@ const ModalAcao = ({
               <Input maxLength={4} />
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={30}>
-          <Col offset={1} span={15}>
-            <Form.Item
-              name="status"
-              label="Status"
-              rules={[
-                {
-                  required: true,
-                  message: 'Por favor, insira o nome',
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={6}>
-            <Form.Item
-              name="percentualExecutado"
-              label="Percentual Executado"
-              rules={[
-                {
-                  required: true,
-                  message: 'Por favor, insira uma porcentagem válida',
-                },
-              ]}
-            >
+          <Col span={5}>
+            <Form.Item name="percentualExecutado" label="Percentual Executado">
               <Input type="number" max={100} min={0} maxLength={3} />
             </Form.Item>
           </Col>
         </Row>
         <Row gutter={30}>
-          <Col offset={1} span={15}>
-            <Form.Item
-              name="justificativa"
-              label="Justificativa"
-              rules={[
-                {
-                  required: true,
-                  message: 'Por favor, insira o nome',
-                },
-              ]}
-            >
+          <Col offset={1} span={12}>
+            <Form.Item name="justificativa" label="Justificativa">
+              <Input.TextArea autoSize={{ minRows: 2, maxRows: 3 }} />
+            </Form.Item>
+          </Col>
+          <Col span={10}>
+            <Form.Item name="status" label="Status">
               <Input />
             </Form.Item>
           </Col>
-          <Col span={6}>
-            <Form.Item
-              name="observacao"
-              label="Observação"
-              rules={[
-                {
-                  required: true,
-                  message: 'Por favor, insira uma data',
-                },
-              ]}
-            >
-              <Input />
+        </Row>
+        <Row gutter={30}>
+          <Col offset={1} span={12}>
+            <Form.Item name="observacao" label="Observação">
+              <Input.TextArea autoSize={{ minRows: 2, maxRows: 3 }} />
             </Form.Item>
+          </Col>
+          <Col span={10}>
+            <Form.Item name="entraves" label="Entravess">
+              <Input.TextArea autoSize={{ minRows: 2, maxRows: 3 }} />
+            </Form.Item>
+            <Form.Item initialValue={metaId} hidden />
+          </Col>
+        </Row>
+        <Row gutter={30}>
+          <Col offset={1} span={5}>
+            <DateFormItem
+              name="inicioPrevisto"
+              label="Início Previsto"
+              initialValue="inicioPrevisto"
+            />
+          </Col>
+          <Col span={5}>
+            <DateFormItem
+              name="terminoPrevisto"
+              label="Término Previsto"
+              initialValue="terminoPrevisto"
+            />
+          </Col>
+          <Col offset={2} span={5}>
+            <DateFormItem
+              name="inicioReal"
+              label="Inicio real"
+              initialValue="inicioReal"
+            />
+          </Col>
+          <Col span={5}>
+            <DateFormItem
+              name="terminoReal"
+              label="Termino real"
+              initialValue="terminoReal"
+            />
           </Col>
         </Row>
         <Row gutter={30}>
@@ -202,30 +206,9 @@ const ModalAcao = ({
             <Form.Item
               name="departamentoResponsavel"
               label="Departamento Responsavel"
-              rules={[
-                {
-                  required: true,
-                  message: 'Por favor, insira o nome',
-                },
-              ]}
             >
               <Input />
             </Form.Item>
-          </Col>
-          <Col span={6}>
-            <Form.Item
-              name="entraves"
-              label="Entravess"
-              rules={[
-                {
-                  required: true,
-                  message: 'Por favor, insira uma data',
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item initialValue={metaId} hidden />
           </Col>
         </Row>
       </Form>

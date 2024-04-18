@@ -7,6 +7,8 @@ import {
   postIniciativa,
   updateIniciativa,
 } from '../../../hooks/services/axios/iniciativaService';
+import PercentageInput from '../../Input/InputPorcentage';
+import { set } from 'lodash';
 
 type Props = {
   updatedIniciativaList: any;
@@ -25,6 +27,7 @@ const ModalIniciativa = ({
 }: Props) => {
   const [form] = Form.useForm();
   const [iniciativas, setIniciativas] = useState<any>([]);
+  const [porcentagem, setPorcentagem] = useState<any>(0);
 
   console.log('estrategias Id', estrategiaId);
 
@@ -106,6 +109,14 @@ const ModalIniciativa = ({
     updatedIniciativaList(editingData);
   };
 
+  const handleSetPorcentagem = (value: string) => {
+    if (value) {
+      setPorcentagem(value);
+
+      form.setFieldsValue({ percentualExecutado: value });
+    }
+  };
+
   return (
     <Modal
       visible={openModal}
@@ -157,7 +168,12 @@ const ModalIniciativa = ({
               },
             ]}
           >
-            <Input type="number" max={100} min={0} />
+            <Input type="number" max={100} min={0} maxLength={3} />
+            <PercentageInput
+              props={undefined}
+              value={porcentagem}
+              handlePercentage={handleSetPorcentagem}
+            />
           </Form.Item>
         </Col>
       </Form>

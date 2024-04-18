@@ -36,6 +36,7 @@
     "react-dropzone": "^14.2.3",
     "react-icons": "^4.10.1",
     "react-input-mask": "^2.0.4",
+    "react-number-format": "^5.3.4",
     "react-pdf": "^7.4.0",
     "react-pdf-js": "^5.1.0",
     "react-router-dom": "^6.11.2",

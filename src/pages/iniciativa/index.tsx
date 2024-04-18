@@ -17,7 +17,7 @@ import {
   getIniciativa,
 } from '../../hooks/services/axios/iniciativaService';
 import { deleteAcao, getAcao } from '../../hooks/services/axios/acaoService';
-import { getMeta } from '../../hooks/services/axios/metaService';
+import { deleteMeta, getMeta } from '../../hooks/services/axios/metaService';
 import { ColumnsType } from 'antd/es/table';
 import ModalEstrategia from '../../components/Modal/ModalEstrategia';
 import { DownOutlined, PlusOutlined } from '@ant-design/icons';
@@ -216,7 +216,7 @@ export default function Iniciativa({
   };
 
   const clickDeleteMeta = async (metaId: any) => {
-    await deleteEstrategia(metaId);
+    await deleteMeta(metaId);
     const newData = [...metas];
     newData.splice(metaId, -1);
     setMeta(newData);
@@ -481,14 +481,14 @@ export default function Iniciativa({
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
-        width: '10%',
+        width: '8%',
       },
       {
         title: 'Percentual Executado',
         dataIndex: 'percentualExecutado',
         key: 'percentualExecutado',
-        width: '7%',
-        render: (value: number) => `${value} %`,
+        width: '12%',
+        render: (value: number) => `${value} % ` || '0',
       },
       {
         title: 'Justificativa',
@@ -518,7 +518,7 @@ export default function Iniciativa({
       {
         title: 'Ação',
         key: 'operation',
-        width: '10%',
+        width: '5%',
         render: (record: any) => {
           return (
             <Space size="middle">
