@@ -1,51 +1,37 @@
+// PercentageInput.tsx
+
 import React from 'react';
 import { Input } from 'antd';
 
-type DataType = {
-  props: any;
-  value: string;
-  handlePercentage: (percentage: string) => void;
-  disabled?: boolean; // Adicionado a propriedade disabled
+type PercentageInputProps = {
+  value?: number | string;
+  onChange?: (value: string) => void;
 };
 
-const PercentageInput = ({
-  props,
-  value,
-  disabled,
-  handlePercentage,
-}: DataType) => {
-  function formatPercentage(input: string): string {
-    const onlyNumbers = input.replace(/\D/g, '');
-
-    // Verifica se o valor é um número válido antes de formatar
-    if (!isNaN(parseFloat(onlyNumbers))) {
-      const number = parseFloat(onlyNumbers) / 100;
-      const formattedValue = new Intl.NumberFormat('en-US', {
-        style: 'percent',
-        maximumFractionDigits: 2,
-      }).format(number);
-
-      return formattedValue;
-    }
-
-    return ''; // Retorna uma string vazia se o valor não for um número válido
-  }
-
+const PercentageInput = ({ value, onChange }: PercentageInputProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formattedValue = formatPercentage(e.target.value);
-    handlePercentage(formattedValue);
-  };
+    let inputValue = e.target.value;
+    // Remover zeros à esquerda, exceto se for "0"
+    inputValue = inputValue.replace(/^0+/, '');
+    // Se o valor for vazio, setar como "0"
+    if (inputValue === '') inputValue = '0';
+    // Se o valor for maior que 100, limitar para 100
+    if (parseInt(inputValue) > 100) inputValue = '100';
+    // Se o valor for menor que 0, limitar para 0
+    if (parseInt(inputValue) < 0) inputValue = '0';
 
-  const displayValue = value || ''; // Definindo o displayValue como string vazia se for undefined
+    onChange && onChange(inputValue);
+  };
 
   return (
     <Input
-      {...props}
-      value={displayValue}
+      type="number"
+      value={value}
       onChange={handleChange}
-      maxLength={25}
-      disabled={disabled}
-      style={disabled ? { color: '#aaa', backgroundColor: '#ddd' } : {}}
+      max={100}
+      min={0}
+      addonAfter="%"
+      maxLength={5} // Incluindo o símbolo de porcentagem
     />
   );
 };

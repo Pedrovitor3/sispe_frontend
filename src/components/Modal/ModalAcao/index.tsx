@@ -9,6 +9,7 @@ import {
 } from '../../../hooks/services/axios/acaoService';
 
 import DateFormItem from '../../Input/DateFormItem';
+import PercentageInput from '../../Input/InputPorcentage';
 
 type Props = {
   updatedAcaoList: any;
@@ -141,8 +142,12 @@ const ModalAcao = ({
             </Form.Item>
           </Col>
           <Col span={5}>
-            <Form.Item name="percentualExecutado" label="Percentual Executado">
-              <Input type="number" max={100} min={0} maxLength={3} />
+            <Form.Item
+              name="percentualExecutado"
+              label="Percentual Executado"
+              initialValue={0}
+            >
+              <PercentageInput />
             </Form.Item>
           </Col>
         </Row>
@@ -173,32 +178,16 @@ const ModalAcao = ({
         </Row>
         <Row gutter={30}>
           <Col offset={1} span={5}>
-            <DateFormItem
-              name="inicioPrevisto"
-              label="Início Previsto"
-              initialValue="inicioPrevisto"
-            />
+            <DateFormItem name="inicioPrevisto" label="Início Previsto" />
           </Col>
           <Col span={5}>
-            <DateFormItem
-              name="terminoPrevisto"
-              label="Término Previsto"
-              initialValue="terminoPrevisto"
-            />
+            <DateFormItem name="terminoPrevisto" label="Término Previsto" />
           </Col>
           <Col offset={2} span={5}>
-            <DateFormItem
-              name="inicioReal"
-              label="Inicio real"
-              initialValue="inicioReal"
-            />
+            <DateFormItem name="inicioReal" label="Início real" />
           </Col>
           <Col span={5}>
-            <DateFormItem
-              name="terminoReal"
-              label="Termino real"
-              initialValue="terminoReal"
-            />
+            <DateFormItem name="terminoReal" label="Término real" />
           </Col>
         </Row>
         <Row gutter={30}>

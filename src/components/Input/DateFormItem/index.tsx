@@ -1,5 +1,7 @@
+// DateFormItem.tsx
+
 import React, { useState } from 'react';
-import { Form, Input, message } from 'antd';
+import { Form } from 'antd';
 import ReactInputMask from 'react-input-mask';
 import moment from 'moment';
 
@@ -7,12 +9,23 @@ type Props = {
   name: string;
   label: string;
   initialValue?: string;
+  required?: boolean;
 };
 
-const DateFormItem = ({ name, label, initialValue }: Props) => {
+const DateFormItem = ({
+  name,
+  label,
+  initialValue,
+  required = false,
+}: Props) => {
   const [isDateValid, setDateValid] = useState<boolean>(true);
 
   const validateDate = (value: any) => {
+    // Permitindo que o valor seja nulo ou vazio se o campo não for obrigatório
+    console.log('value', value);
+    console.log('required', required);
+    if (!required && !value) return true;
+
     const isValid = moment(value, 'DD/MM/YYYY', true).isValid();
     setDateValid(isValid);
     return isValid;
@@ -23,15 +36,16 @@ const DateFormItem = ({ name, label, initialValue }: Props) => {
       name={name}
       label={label}
       validateStatus={isDateValid ? undefined : 'error'}
-      help={!isDateValid && 'Por favor, insira uma data válida'}
-      initialValue={initialValue}
       rules={[
         {
           validator(_, value) {
-            if (!value || validateDate(value)) {
-              return Promise.resolve();
+            // Permitindo que o valor seja nulo ou vazio se o campo não for obrigatório
+            if (!required && !value) return Promise.resolve();
+
+            if (!validateDate(value)) {
+              return Promise.reject('Insira uma data válida');
             }
-            return Promise.reject('Por favor, insira uma data válida');
+            return Promise.resolve();
           },
         },
       ]}

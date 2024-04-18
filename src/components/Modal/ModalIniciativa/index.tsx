@@ -1,4 +1,4 @@
-import { Col, Form, Input, Modal, message } from 'antd';
+import { Col, Form, Input, Modal, Row, message } from 'antd';
 import { useEffect, useState } from 'react';
 
 import '../index.css';
@@ -143,39 +143,22 @@ const ModalIniciativa = ({
             <Input />
           </Form.Item>
         </Col>
-        <Col offset={1} span={20}>
-          <Form.Item
-            name="status"
-            label="Status"
-            rules={[
-              {
-                required: true,
-                message: 'Por favor, insira o nome',
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-        </Col>
-        <Col offset={1} span={20}>
-          <Form.Item
-            name="percentualExecutado"
-            label="Percentual Executado"
-            rules={[
-              {
-                required: true,
-                message: 'Por favor, insira o nome',
-              },
-            ]}
-          >
-            <Input type="number" max={100} min={0} maxLength={3} />
-            <PercentageInput
-              props={undefined}
-              value={porcentagem}
-              handlePercentage={handleSetPorcentagem}
-            />
-          </Form.Item>
-        </Col>
+        <Row>
+          <Col offset={1} span={10}>
+            <Form.Item name="status" label="Status">
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col offset={2} span={8}>
+            <Form.Item
+              name="percentualExecutado"
+              label="Percentual Executado"
+              initialValue={0}
+            >
+              <PercentageInput />
+            </Form.Item>
+          </Col>
+        </Row>
       </Form>
     </Modal>
   );
