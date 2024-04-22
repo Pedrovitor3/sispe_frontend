@@ -43,10 +43,6 @@ type ResponsavelData = {
   acao: any;
 };
 
-type tempRespData = {
-  id: string;
-};
-
 const ModalAcao = ({
   updatedAcaoList,
   id,
@@ -57,9 +53,6 @@ const ModalAcao = ({
   const [form] = Form.useForm();
 
   const [responsaveis, setResponsaveis] = useState<ResponsavelData[]>([]);
-  const [responsaveisTable, setResponsaveisTable] = useState<ResponsavelData[]>(
-    [],
-  );
 
   // Adicione um estado para armazenar temporariamente os responsáveis selecionados
   const [tempResponsaveis, setTempResponsaveis] = useState<any[]>([]);
@@ -181,14 +174,6 @@ const ModalAcao = ({
       }
     }
     form.setFieldsValue({ responsaveis: '' });
-  };
-
-  const handleFilterRsponsaveis = () => {
-    const responsaveisTable = responsaveis.filter((resp: any) => {
-      return tempResponsaveis.some(temp => temp.id === resp.id);
-    });
-
-    setResponsaveisTable(responsaveisTable);
   };
 
   const handleSelectResponsavel = (value: any) => {
@@ -336,9 +321,23 @@ const ModalAcao = ({
               <DateFormItem name="terminoReal" label="Término real" />
             </Col>
           </Row>
-          <Row>
+          <Row gutter={0}>
+            <Col offset={1} span={2}>
+              <Button
+                style={{
+                  marginTop: '29px',
+                }}
+                onClick={() => {
+                  setShowResponsavelModal(true);
+                }}
+                title="Adicionar Responsável" // Adicione o tooltip aqui
+              >
+                <PlusOutlined />
+                Novo
+              </Button>
+            </Col>
             <Col offset={1} span={16}>
-              <Form.Item name="responsaveis" label="Responsavel">
+              <Form.Item name="responsaveis" label="Responsável">
                 <Select
                   showSearch
                   placeholder={'Selecione responsavel'}
@@ -356,28 +355,17 @@ const ModalAcao = ({
                 />
               </Form.Item>
             </Col>
+
             <Col span={2}>
               <Button
                 style={{
                   marginTop: '29px',
-                  marginLeft: '20%',
-                }}
-                onClick={() => {
-                  setShowResponsavelModal(true);
-                }}
-              >
-                <PlusOutlined />
-              </Button>
-              <Button
-                style={{
-                  marginTop: '29px',
-                  marginLeft: '-1%',
-                  marginRight: '9px',
-                  width: '7.5%',
+                  marginLeft: '25%',
                 }}
                 onClick={() => {
                   handleEnviaResponsaveis();
                 }}
+                title="Incluir na ação" // Adicione o tooltip aqui
               >
                 <PlusOutlined /> Incluir
               </Button>
