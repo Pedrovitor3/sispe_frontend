@@ -28,8 +28,8 @@ export async function getAcao(url: any) {
 
 export async function postAcao(acao: Acao) {
   try {
-    await APISISPE.post('/acao', acao, getConfig('priv'));
-    message.success('cadastrado com sucesso');
+    const res = await APISISPE.post('/acao', acao, getConfig('priv'));
+    return res;
   } catch (error) {
     console.error(`Error: ${error}`);
   }

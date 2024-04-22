@@ -1,4 +1,16 @@
-import { Col, Form, Input, Modal, Row, message } from 'antd';
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  Modal,
+  Popconfirm,
+  Row,
+  Select,
+  Space,
+  Table,
+  message,
+} from 'antd';
 import { useEffect, useState } from 'react';
 
 import '../index.css';
@@ -10,6 +22,11 @@ import {
 
 import DateFormItem from '../../Input/DateFormItem';
 import PercentageInput from '../../Input/InputPorcentage';
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { getResponsavel } from '../../../hooks/services/axios/responsavelService';
+import ModalResponsveis from '../ModalResponsaveis';
+import { ColumnsType } from 'antd/es/table';
+import { set } from 'lodash';
 
 type Props = {
   updatedAcaoList: any;
@@ -17,6 +34,17 @@ type Props = {
   metaId: string;
   openModal: boolean;
   closeModal: (refresh: boolean) => void;
+};
+
+type ResponsavelData = {
+  id: string;
+  name: string;
+  cargo: string;
+  acao: any;
+};
+
+type tempRespData = {
+  id: string;
 };
 
 const ModalAcao = ({
@@ -28,14 +56,24 @@ const ModalAcao = ({
 }: Props) => {
   const [form] = Form.useForm();
 
-  console.log('estrategias Id', metaId);
+  const [responsaveis, setResponsaveis] = useState<ResponsavelData[]>([]);
+  const [responsaveisTable, setResponsaveisTable] = useState<ResponsavelData[]>(
+    [],
+  );
+
+  // Adicione um estado para armazenar temporariamente os responsáveis selecionados
+  const [tempResponsaveis, setTempResponsaveis] = useState<any[]>([]);
+
+  const [selectResponsavelId, setSelectedResponsavelId] = useState<string>('');
+
+  const [showResponsavelModal, setShowResponsavelModal] =
+    useState<boolean>(false);
 
   const handleOk = (e: any) => {
     e.preventDefault();
     form
       .validateFields()
       .then(() => {
-        const formData = form.getFieldsValue(true);
         if (id) {
           submitUpdate();
         } else {
@@ -48,8 +86,11 @@ const ModalAcao = ({
   };
 
   useEffect(() => {
+    setTempResponsaveis([]);
+
     loadingMeta();
-  }, [id && openModal]);
+    loadingResponsaveis();
+  }, [openModal]);
 
   useEffect(() => {
     form.setFieldsValue({ meta: metaId });
@@ -77,7 +118,10 @@ const ModalAcao = ({
             terminoReal: acao.terminoReal,
 
             meta: acao.meta ? acao.meta.id : null,
+            responsaveis: acao.responsaveis ? acao.responsaveis.id : null,
           });
+          setTempResponsaveis(acao.responsaveis);
+          console.log('temp res', acao);
         } else {
           message.error('Ocorreu um erro inesperado');
         }
@@ -85,123 +129,279 @@ const ModalAcao = ({
     }
   };
 
+  const loadingResponsaveis = async () => {
+    const resData = await getResponsavel('responsavel');
+    if (resData) {
+      const responsavelData = resData.data;
+      setResponsaveis(responsavelData);
+    }
+  };
+
   const submitCreate = async () => {
     const editingData = form.getFieldsValue(true);
-    await postAcao(editingData);
 
+    editingData.responsaveis = tempResponsaveis;
+
+    await postAcao(editingData);
     updatedAcaoList(editingData);
   };
 
   const submitUpdate = async () => {
     const editingData = form.getFieldsValue(true);
 
+    editingData.responsaveis = tempResponsaveis;
     await updateAcao(editingData, id);
     updatedAcaoList(editingData);
   };
 
+  const hideModal = (refresh: boolean) => {
+    setShowResponsavelModal(false);
+  };
+  const updateResponsaveisList = (newResp: any) => {
+    setResponsaveis(prevResp => [...prevResp, newResp]);
+    loadingMeta();
+  };
+
+  const handleEnviaResponsaveis = () => {
+    const idResp = form.getFieldValue('responsaveis');
+    const hasResp = tempResponsaveis.find((resp: any) => {
+      return resp?.id === idResp;
+    });
+
+    if (!hasResp) {
+      const newResp = responsaveis.find((resp: any) => resp?.id === idResp);
+
+      if (newResp) {
+        const newObj = {
+          id: newResp.id,
+          cargo: newResp.cargo,
+          name: newResp.name,
+        };
+        setTempResponsaveis(prevResp => [...prevResp, newObj]);
+      }
+    }
+    form.setFieldsValue({ responsaveis: '' });
+  };
+
+  const handleFilterRsponsaveis = () => {
+    const responsaveisTable = responsaveis.filter((resp: any) => {
+      return tempResponsaveis.some(temp => temp.id === resp.id);
+    });
+
+    setResponsaveisTable(responsaveisTable);
+  };
+
+  const handleSelectResponsavel = (value: any) => {
+    setSelectedResponsavelId(value);
+  };
+
+  const handleDeleteResponsavel = async (resp: any) => {
+    const newData = [...tempResponsaveis];
+    newData.splice(resp, -1);
+    setTempResponsaveis(newData);
+  };
+
+  const columns: ColumnsType<any> = [
+    {
+      title: 'Nome',
+      dataIndex: 'name',
+      key: 'name',
+      width: '30%',
+    },
+    {
+      title: 'Cargo',
+      dataIndex: 'cargo',
+      key: 'cargo',
+    },
+
+    {
+      title: 'Ação',
+      key: 'operation',
+      width: '10%',
+      render: (record: any) => {
+        return (
+          <Space size="middle">
+            <Popconfirm
+              title="Tem certeza de que deseja excluir?"
+              onConfirm={() => handleDeleteResponsavel(record)}
+            >
+              <DeleteOutlined
+                className="icon-delete-phones"
+                style={{ color: 'red' }}
+              />
+            </Popconfirm>
+          </Space>
+        );
+      },
+    },
+  ];
+
   return (
-    <Modal
-      visible={openModal}
-      title="Ação"
-      okText="Salvar"
-      onCancel={() => {
-        form.resetFields();
-        closeModal(true);
-      }}
-      onOk={handleOk}
-      width={900}
-    >
-      <Form layout="vertical" form={form}>
-        <Row gutter={30}>
-          <Col offset={1} span={12}>
-            <Form.Item
-              name="name"
-              label="Nome"
-              rules={[
-                {
-                  required: true,
-                  message: 'Por favor, insira o nome',
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={5}>
-            <Form.Item
-              name="ano"
-              label="Ano"
-              rules={[
-                {
-                  pattern: /^(19|20)\d{2}$/,
-                  message: 'Insira um ano válido (exemplo: 2024)',
-                },
-              ]}
-            >
-              <Input maxLength={4} />
-            </Form.Item>
-          </Col>
-          <Col span={5}>
-            <Form.Item
-              name="percentualExecutado"
-              label="Percentual Executado"
-              initialValue={0}
-            >
-              <PercentageInput />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={30}>
-          <Col offset={1} span={12}>
-            <Form.Item name="justificativa" label="Justificativa">
-              <Input.TextArea autoSize={{ minRows: 2, maxRows: 3 }} />
-            </Form.Item>
-          </Col>
-          <Col span={10}>
-            <Form.Item name="status" label="Status">
-              <Input />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={30}>
-          <Col offset={1} span={12}>
-            <Form.Item name="observacao" label="Observação">
-              <Input.TextArea autoSize={{ minRows: 2, maxRows: 3 }} />
-            </Form.Item>
-          </Col>
-          <Col span={10}>
-            <Form.Item name="entraves" label="Entravess">
-              <Input.TextArea autoSize={{ minRows: 2, maxRows: 3 }} />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={30}>
-          <Col offset={1} span={5}>
-            <DateFormItem name="inicioPrevisto" label="Início Previsto" />
-          </Col>
-          <Col span={5}>
-            <DateFormItem name="terminoPrevisto" label="Término Previsto" />
-          </Col>
-          <Col offset={2} span={5}>
-            <DateFormItem name="inicioReal" label="Início real" />
-          </Col>
-          <Col span={5}>
-            <DateFormItem name="terminoReal" label="Término real" />
-          </Col>
-        </Row>
-        <Row gutter={30}>
-          <Col offset={1} span={15}>
-            <Form.Item
-              name="departamentoResponsavel"
-              label="Departamento Responsavel"
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Form.Item initialValue={metaId} hidden />
-      </Form>
-    </Modal>
+    <>
+      <Modal
+        visible={openModal}
+        title="Ação"
+        okText="Salvar"
+        onCancel={() => {
+          form.resetFields();
+          closeModal(true);
+        }}
+        onOk={handleOk}
+        width={900}
+      >
+        <Form layout="vertical" form={form}>
+          <Row gutter={30}>
+            <Col offset={1} span={12}>
+              <Form.Item
+                name="name"
+                label="Nome"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Por favor, insira o nome',
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={5}>
+              <Form.Item
+                name="ano"
+                label="Ano"
+                rules={[
+                  {
+                    pattern: /^(19|20)\d{2}$/,
+                    message: 'Insira um ano válido (exemplo: 2024)',
+                  },
+                ]}
+              >
+                <Input maxLength={4} />
+              </Form.Item>
+            </Col>
+            <Col span={5}>
+              <Form.Item
+                name="percentualExecutado"
+                label="Percentual Executado"
+                initialValue={0}
+              >
+                <PercentageInput />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={30}>
+            <Col offset={1} span={12}>
+              <Form.Item name="justificativa" label="Justificativa">
+                <Input.TextArea autoSize={{ minRows: 2, maxRows: 3 }} />
+              </Form.Item>
+            </Col>
+            <Col span={4}>
+              <Form.Item name="status" label="Status">
+                <Input />
+              </Form.Item>
+            </Col>
+
+            <Col span={6}>
+              <Form.Item
+                name="departamentoResponsavel"
+                label="Departamento Responsavel"
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={30}>
+            <Col offset={1} span={12}>
+              <Form.Item name="observacao" label="Observação">
+                <Input.TextArea autoSize={{ minRows: 2, maxRows: 3 }} />
+              </Form.Item>
+            </Col>
+            <Col span={10}>
+              <Form.Item name="entraves" label="Entravess">
+                <Input.TextArea autoSize={{ minRows: 2, maxRows: 3 }} />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={30}>
+            <Col offset={1} span={5}>
+              <DateFormItem name="inicioPrevisto" label="Início Previsto" />
+            </Col>
+            <Col span={5}>
+              <DateFormItem name="terminoPrevisto" label="Término Previsto" />
+            </Col>
+            <Col offset={2} span={5}>
+              <DateFormItem name="inicioReal" label="Início real" />
+            </Col>
+            <Col span={5}>
+              <DateFormItem name="terminoReal" label="Término real" />
+            </Col>
+          </Row>
+          <Row>
+            <Col offset={1} span={16}>
+              <Form.Item name="responsaveis" label="Responsavel">
+                <Select
+                  showSearch
+                  placeholder={'Selecione responsavel'}
+                  value={selectResponsavelId}
+                  onChange={value => handleSelectResponsavel(value)}
+                  filterOption={(input, option) =>
+                    (option?.label ?? '')
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+                  options={responsaveis.map(resp => ({
+                    label: resp.name,
+                    value: resp.id,
+                  }))}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={2}>
+              <Button
+                style={{
+                  marginTop: '29px',
+                  marginLeft: '20%',
+                }}
+                onClick={() => {
+                  setShowResponsavelModal(true);
+                }}
+              >
+                <PlusOutlined />
+              </Button>
+              <Button
+                style={{
+                  marginTop: '29px',
+                  marginLeft: '-1%',
+                  marginRight: '9px',
+                  width: '7.5%',
+                }}
+                onClick={() => {
+                  handleEnviaResponsaveis();
+                }}
+              >
+                <PlusOutlined /> Incluir
+              </Button>
+            </Col>
+          </Row>
+          <Table
+            columns={columns}
+            rowKey="key"
+            dataSource={tempResponsaveis}
+            rowClassName={() => 'custom-table-row'} // Defina o nome da classe para o estilo personalizado
+            className="custom-table"
+            pagination={false}
+          />
+
+          <Form.Item initialValue={metaId} hidden />
+        </Form>
+      </Modal>
+      <ModalResponsveis
+        id={''}
+        openModal={showResponsavelModal}
+        closeModal={hideModal}
+        updateResponsaveisList={updateResponsaveisList}
+      />
+    </>
   );
 };
 
