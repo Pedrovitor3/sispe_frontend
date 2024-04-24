@@ -67,13 +67,13 @@ interface AcaoData {
 type Props = {
   setChave: (id: string) => void;
   objetivoId: any;
-  onEstrategiaChange: (id: string) => void;
+  onAcaoChange: (id: string) => void;
 };
 
 export default function Iniciativa({
   objetivoId,
   setChave,
-  onEstrategiaChange,
+  onAcaoChange,
 }: Props) {
   const [estrategias, setEstrategia] = useState<EstrategiaData[]>([]);
   const [iniciativas, setIniciativas] = useState<IniciativasData[]>([]);
@@ -175,6 +175,10 @@ export default function Iniciativa({
 
   const handleOpenEstrategiaModal = () => {
     setShowEstrategiaModal(true);
+  };
+  const handleAcaoClick = (idAcao: string) => {
+    setChave('4');
+    onAcaoChange(idAcao);
   };
   const handleVoltarPage = () => {
     setChave('2');
@@ -476,7 +480,16 @@ export default function Iniciativa({
         dataIndex: 'name',
         key: 'name',
         width: '15%',
+        render: (text: string, record: AcaoData) => (
+          <a
+            className="objetivo-title"
+            onClick={() => handleAcaoClick(record.id)}
+          >
+            {text}
+          </a>
+        ),
       },
+
       {
         title: 'Status',
         dataIndex: 'status',

@@ -1,0 +1,66 @@
+/*     CARD  */
+.card-list{
+  width: 100%;
+  position: relative;
+}
+
+
+/*  KANBAM    */
+
+.body-kanbam {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+.andamento-container {
+  flex: 1;
+  margin: 0px 5px;
+  padding: 10px;
+  background-color: #f4f4f4;
+  border-radius: 6px;
+  min-width: 250px;
+  position: relative;
+}
+
+.andamento-title {
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 25px;
+  color: rgba(17, 16, 16, 0.918);
+}
+
+.andamento-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stage-cards {
+  font-size: 22px;
+  text-align: center;
+  margin-bottom: 25px;
+  color: rgba(17, 16, 16, 0.918);
+}
+
+/* Estilos para as cards */
+.card-etapa {
+  padding: 10px;
+  margin-bottom: 10px !important;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.card-title {
+  font-size: 16px;
+  margin: 0px 0px 5px 5px;
+  color: black;
+}
+
+
+

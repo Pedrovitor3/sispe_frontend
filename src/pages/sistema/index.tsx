@@ -33,6 +33,8 @@ import { removeParameterUrl } from '../../utils/UtilsSistema';
 import Board from '../board';
 import Estrategia from '../iniciativa';
 import Iniciativa from '../iniciativa';
+import Etapa from '../etapa';
+import Andamento from '../andamento';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -58,8 +60,9 @@ const Sistema: React.FC = () => {
     token: { colorBgContainer },
   } = theme.useToken();
   const [unidades, setUnidades] = useState([{ nome: '', codigo: 0 }]);
-  const [objetivo, setObjetivoId] = useState<string>(''); // State for boletimId
-  const [estrategia, setEstrategia] = useState<string>(''); // State for blocoId
+  const [objetivo, setObjetivoId] = useState<string>(''); // State for objetivo
+  const [estrategia, setEstrategia] = useState<string>(''); // State for estrategia
+  const [acao, setAcao] = useState<string>(''); // State for acao
   const [openModalUnidade, setOpenModalUnidade] = useState(false);
   const [collapsed, setCollapsed] = useState(true);
   const [unidade, setUnidade] = useState<{
@@ -186,10 +189,9 @@ const Sistema: React.FC = () => {
     setObjetivoId(id);
   };
 
-  const handleEstrategiaChange = (id: string) => {
-    setEstrategia(id);
+  const handleAcaoChange = (id: string) => {
+    setAcao(id);
   };
-
   return (
     <ConfigProvider locale={ptBR}>
       <Layout style={{ minHeight: '100vh', width: '100%' }}>
@@ -384,10 +386,12 @@ const Sistema: React.FC = () => {
                       '3': (
                         <Iniciativa
                           setChave={setChildrenMenu}
-                          onEstrategiaChange={handleEstrategiaChange}
+                          onAcaoChange={handleAcaoChange}
                           objetivoId={objetivo}
                         />
                       ),
+                      '4': <Etapa setChave={setChildrenMenu} acaoId={acao} />,
+                      '5': <Andamento />,
                     }[chave]
                   }
                 </>
