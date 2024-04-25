@@ -81,7 +81,7 @@ const ModalAcao = ({
   useEffect(() => {
     setTempResponsaveis([]);
 
-    loadingMeta();
+    loadingAcao();
     loadingResponsaveis();
   }, [openModal]);
 
@@ -89,7 +89,7 @@ const ModalAcao = ({
     form.setFieldsValue({ meta: metaId });
   }, [metaId]);
 
-  const loadingMeta = async () => {
+  const loadingAcao = async () => {
     if (id) {
       await getAcao(`acao/${id}`).then((res: any) => {
         if (res) {
@@ -114,7 +114,6 @@ const ModalAcao = ({
             responsaveis: acao.responsaveis ? acao.responsaveis.id : null,
           });
           setTempResponsaveis(acao.responsaveis);
-          console.log('temp res', acao);
         } else {
           message.error('Ocorreu um erro inesperado');
         }
@@ -150,9 +149,10 @@ const ModalAcao = ({
   const hideModal = (refresh: boolean) => {
     setShowResponsavelModal(false);
   };
+
   const updateResponsaveisList = (newResp: any) => {
     setResponsaveis(prevResp => [...prevResp, newResp]);
-    loadingMeta();
+    loadingResponsaveis();
   };
 
   const handleEnviaResponsaveis = () => {

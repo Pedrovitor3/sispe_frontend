@@ -22,8 +22,6 @@ const DateFormItem = ({
 
   const validateDate = (value: any) => {
     // Permitindo que o valor seja nulo ou vazio se o campo não for obrigatório
-    console.log('value', value);
-    console.log('required', required);
     if (!required && !value) return true;
 
     const isValid = moment(value, 'DD/MM/YYYY', true).isValid();

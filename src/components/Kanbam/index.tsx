@@ -7,7 +7,7 @@ type Props = {
   etapas: any;
 };
 
-const AndamentoList = ({ andamentos, etapas }: Props) => {
+const KanbamList = ({ andamentos, etapas }: Props) => {
   return (
     <div className="body-kanbam">
       {andamentos.length > 0 ? (
@@ -36,4 +36,4 @@ const AndamentoList = ({ andamentos, etapas }: Props) => {
   );
 };
 
-export default AndamentoList;
+export default KanbamList;

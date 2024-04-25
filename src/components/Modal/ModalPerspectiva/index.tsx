@@ -80,7 +80,6 @@ const ModalPerspectiva = ({
 
   const submitCreate = async () => {
     const editingData = form.getFieldsValue(true);
-    console.log('position', editingData);
     await postPerspectiva(editingData);
 
     updatedPerspectivaList(editingData);

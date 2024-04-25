@@ -35,6 +35,7 @@ import Estrategia from '../iniciativa';
 import Iniciativa from '../iniciativa';
 import Etapa from '../etapa';
 import Andamento from '../andamento';
+import Responsaveis from '../responsaveis';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -392,6 +393,7 @@ const Sistema: React.FC = () => {
                       ),
                       '4': <Etapa setChave={setChildrenMenu} acaoId={acao} />,
                       '5': <Andamento />,
+                      '6': <Responsaveis />,
                     }[chave]
                   }
                 </>

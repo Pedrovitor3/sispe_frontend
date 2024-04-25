@@ -25,8 +25,6 @@ const ModalMeta = ({
 }: Props) => {
   const [form] = Form.useForm();
 
-  console.log('estrategias Id', iniciativaId);
-
   const handleOk = (e: any) => {
     e.preventDefault();
     form

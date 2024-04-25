@@ -19,6 +19,7 @@ import {
   getAndamento,
 } from '../../hooks/services/axios/andamentoService';
 import AndamentoList from '../../components/Kanbam';
+import KanbamList from '../../components/Kanbam';
 
 type Props = {
   setChave: (id: string) => void;
@@ -164,7 +165,7 @@ export default function Etapa({ setChave, acaoId }: Props) {
         Nova Etapa
       </Button>
 
-      <AndamentoList andamentos={andamentos} etapas={etapas} />
+      <KanbamList andamentos={andamentos} etapas={etapas} />
 
       <ModalEtapa
         updatedEtapaList={updateEtapa}

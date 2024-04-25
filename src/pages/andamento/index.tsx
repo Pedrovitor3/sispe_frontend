@@ -9,6 +9,7 @@ import {
   getAndamento,
 } from '../../hooks/services/axios/andamentoService';
 import AndamentoList from '../../components/Kanbam';
+import KanbamList from '../../components/Kanbam';
 
 type EtapaData = {
   id: string;
@@ -47,7 +48,6 @@ export default function Andamento() {
   const loadingEtapa = async () => {
     const res = await getEtapa('etapa');
     if (res) {
-      console.log('resdata etapa', res.data);
       setEtapa(res.data);
     }
   };
@@ -55,8 +55,6 @@ export default function Andamento() {
   const loadingAndamento = async () => {
     const res = await getAndamento('andamento');
     if (res) {
-      console.log('resdata andamae', res.data);
-
       setAndamento(res.data);
     }
   };
@@ -136,7 +134,7 @@ export default function Andamento() {
       >
         Novo Andamento
       </Button>
-      <AndamentoList andamentos={andamentos} etapas={etapas} />
+      <KanbamList andamentos={andamentos} etapas={etapas} />
 
       <ModalAndamento
         updatedAndamentoList={updateAndamento}

@@ -70,7 +70,6 @@ const ModalEtapa = ({
             acao: etapa.acao ? etapa.acao.id : null,
           });
 
-          console.log('AND ID', etapa);
           setSelectedAndamentoId(etapa.anadamento?.id);
         } else {
           message.error('Ocorreu um erro inesperado');

@@ -26,8 +26,6 @@ const ModalObjetivo = ({
   const [form] = Form.useForm();
   const [objetivo, setObjetivos] = useState<any>([]);
 
-  console.log('pers Id', perspectivaId);
-
   const handleOk = (e: any) => {
     e.preventDefault();
     form
@@ -91,7 +89,6 @@ const ModalObjetivo = ({
 
   const submitCreate = async () => {
     const editingData = form.getFieldsValue(true);
-    console.log('objetivo', editingData);
     await postObjetivo(editingData);
 
     updatedObjetivoList(editingData);

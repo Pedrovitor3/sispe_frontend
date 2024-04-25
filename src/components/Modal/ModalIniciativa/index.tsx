@@ -27,9 +27,6 @@ const ModalIniciativa = ({
 }: Props) => {
   const [form] = Form.useForm();
   const [iniciativas, setIniciativas] = useState<any>([]);
-  const [porcentagem, setPorcentagem] = useState<any>(0);
-
-  console.log('estrategias Id', estrategiaId);
 
   const handleOk = (e: any) => {
     e.preventDefault();
@@ -96,7 +93,6 @@ const ModalIniciativa = ({
 
   const submitCreate = async () => {
     const editingData = form.getFieldsValue(true);
-    console.log('iniciativas', editingData);
     await postIniciativa(editingData);
 
     updatedIniciativaList(editingData);
@@ -107,14 +103,6 @@ const ModalIniciativa = ({
 
     await updateIniciativa(editingData, id);
     updatedIniciativaList(editingData);
-  };
-
-  const handleSetPorcentagem = (value: string) => {
-    if (value) {
-      setPorcentagem(value);
-
-      form.setFieldsValue({ percentualExecutado: value });
-    }
   };
 
   return (

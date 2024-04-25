@@ -46,7 +46,6 @@ const ModalResponsveis = ({
       await getResponsavel(`responsavel/${id}`).then(response => {
         if (response !== false) {
           const respData = response.data;
-          console.log('respData', respData);
           form.setFieldsValue({
             id: respData.id,
             name: respData.name,

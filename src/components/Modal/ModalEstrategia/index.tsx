@@ -26,8 +26,6 @@ const ModalEstrategia = ({
   const [form] = Form.useForm();
   const [estrategia, setEstrategias] = useState<any>([]);
 
-  console.log('obj Id', objetivoId);
-
   const handleOk = (e: any) => {
     e.preventDefault();
     form
@@ -91,7 +89,6 @@ const ModalEstrategia = ({
 
   const submitCreate = async () => {
     const editingData = form.getFieldsValue(true);
-    console.log('Estrategia', editingData);
     await postEstrategia(editingData);
 
     updatedEstrategiaList(editingData);

@@ -1,9 +1,7 @@
 import {
   ContainerOutlined,
-  DesktopOutlined,
-  PaperClipOutlined,
-  PartitionOutlined,
   ProjectOutlined,
+  UserOutlined,
 } from '@ant-design/icons';
 import { perfisSistema } from '../../configs/sistemaConfig';
 
@@ -20,6 +18,14 @@ export const menus = [
     label: 'Andamentos',
     key: '5',
     icon: <ProjectOutlined />,
+    link: '/',
+    perfis: [perfisSistema.ALL],
+    children: [],
+  },
+  {
+    label: 'Responsaveis',
+    key: '6',
+    icon: <UserOutlined />,
     link: '/',
     perfis: [perfisSistema.ALL],
     children: [],
