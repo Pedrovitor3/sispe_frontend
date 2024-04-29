@@ -365,6 +365,9 @@ const Sistema: React.FC = () => {
                     '1': <span>Dashboard</span>,
                     '2': <span>Perspectivas</span>,
                     '3': <span>Estratégias</span>,
+                    '4': <span>Etapa</span>,
+                    '5': <span>Andamento</span>,
+                    '6': <span>Responsavéis</span>,
                   }[chave]
                 }
               </Breadcrumb.Item>

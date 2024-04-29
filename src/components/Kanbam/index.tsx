@@ -190,7 +190,7 @@ const KanbamList = ({ andamentos, etapas, data, updatedData }: Props) => {
               <div className="andamento-header">
                 <p className="andamento-title">
                   {data === 'andamento' && (
-                    <span className="icon-wrapper-etapa">
+                    <span className="icon-wrapper-andamento">
                       {renderMenuAndamento(andamento)}
                     </span>
                   )}

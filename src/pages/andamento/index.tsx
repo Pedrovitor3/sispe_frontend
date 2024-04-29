@@ -10,6 +10,7 @@ import {
 } from '../../hooks/services/axios/andamentoService';
 import AndamentoList from '../../components/Kanbam';
 import KanbamList from '../../components/Kanbam';
+import '../index.css';
 
 type EtapaData = {
   id: string;
