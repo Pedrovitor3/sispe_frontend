@@ -74,10 +74,6 @@ export default function Board({ setChave, onObjetivoChange }: Props) {
     setShowPerspectivaModal(true);
   };
 
-  const handleOpenObjetivoModal = () => {
-    setShowObjetivoModal(true);
-  };
-
   const updatePerspectiva = (perspectivas: any) => {
     setPerspectiva(prevPers => [...prevPers, perspectivas]);
     loadingPerspectiva();
@@ -257,10 +253,11 @@ export default function Board({ setChave, onObjetivoChange }: Props) {
         renderItem={perspectiva => (
           <List.Item>
             <Card
+              className="container-card"
               title={perspectiva.name}
               extra={
                 <>
-                  <span className="icon-wrapper">
+                  <span className="icon-wrapper-perspectiva">
                     {renderMenuPerspectiva(perspectiva)}
                   </span>
                 </>

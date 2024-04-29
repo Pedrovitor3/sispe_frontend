@@ -51,14 +51,8 @@ const KanbamList = ({ andamentos, etapas, data, updatedData }: Props) => {
   const clickDeleteAndamento = async (andamento: any) => {
     const andamentoId = andamento?.id;
     await deleteAndamento(andamentoId);
-    {
-      /*
-      const newData = [...etapas];
-      newData.splice(etapaId, -1);
-      setEtapa(newData);
-      */
-    }
-    // loadingEtapa();
+
+    updatedData();
   };
 
   const hideModal = () => {

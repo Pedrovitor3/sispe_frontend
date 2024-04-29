@@ -32,6 +32,7 @@
 
 
 
+
 /* Buttons */
 :where(.css-i0uh1t).ant-btn-primary:not(:disabled):hover {
   color: aliceblue !important;
@@ -69,7 +70,13 @@
   visibility: hidden;
 }
 
+.icon-wrapper-perspectiva{
+  visibility: hidden;
+}
 
+.container-card:hover .icon-wrapper-perspectiva {
+  visibility: visible ;
+}
 
 .container-body-card:hover .icon-wrapper-objetivo{
   visibility: visible;

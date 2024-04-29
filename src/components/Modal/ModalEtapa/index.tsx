@@ -157,7 +157,16 @@ const ModalEtapa = ({
 
           <Row gutter={10}>
             <Col offset={1} span={16}>
-              <Form.Item name="andamento" label="Andamento">
+              <Form.Item
+                name="andamento"
+                label="Andamento"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Por favor, insira um andamento',
+                  },
+                ]}
+              >
                 <Select
                   showSearch
                   placeholder={'Selecione Andamento'}

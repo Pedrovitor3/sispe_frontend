@@ -363,8 +363,8 @@ const Sistema: React.FC = () => {
                 {
                   {
                     '1': <span>Dashboard</span>,
-                    '2': <span>Objetivo</span>,
-                    '3': <span>Iniciativas</span>,
+                    '2': <span>Perspectivas</span>,
+                    '3': <span>Estratégias</span>,
                   }[chave]
                 }
               </Breadcrumb.Item>

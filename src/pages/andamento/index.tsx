@@ -79,57 +79,6 @@ export default function Andamento() {
     loadingAndamento();
   };
 
-  const renderMenuAndamento = (record: any) => {
-    return (
-      <Space size="middle">
-        <Dropdown
-          menu={{
-            items: [
-              {
-                label: 'Alterar',
-                key: '1',
-                onClick: () => {
-                  setRecordAndamento(record);
-                },
-              },
-              {
-                label: (
-                  <Popconfirm
-                    title="Tem certeza de que deseja desabilitar este registro?"
-                    onConfirm={() => clickDeleteAndamento(record)}
-                  >
-                    Excluir
-                  </Popconfirm>
-                ),
-                key: '2',
-                danger: true,
-              },
-              {
-                label: (
-                  <Space style={{ color: ' rgb(0, 21, 42)' }}>
-                    <PlusOutlined style={{ color: 'rgb(0, 21, 42)' }} />
-                    Objetivo
-                  </Space>
-                ),
-                key: '3',
-                onClick: () => {
-                  setRecordAndamento(record);
-                },
-              },
-            ],
-            onClick: handleMenuClickAndamento,
-          }}
-        >
-          <a onClick={e => e.preventDefault()} className="option">
-            <Space>
-              <EditOutlined />
-            </Space>
-          </a>
-        </Dropdown>
-      </Space>
-    );
-  };
-
   return (
     <>
       <Button

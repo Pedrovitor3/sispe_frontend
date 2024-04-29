@@ -281,7 +281,7 @@ export default function Iniciativa({
         width: '10%',
       },
       {
-        title: 'Iniciativas',
+        title: 'Iniciativa',
         dataIndex: 'name',
         width: '40%',
       },
