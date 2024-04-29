@@ -65,6 +65,11 @@ export default function Etapa({ setChave, acaoId }: Props) {
     loadingEtapa();
   };
 
+  const updatedData = () => {
+    loadingAndamento();
+    loadingEtapa();
+  };
+
   const loadingEtapa = async () => {
     const res = await getEtapa('etapa');
     if (res) {
@@ -165,7 +170,12 @@ export default function Etapa({ setChave, acaoId }: Props) {
         Nova Etapa
       </Button>
 
-      <KanbamList andamentos={andamentos} etapas={etapas} />
+      <KanbamList
+        andamentos={andamentos}
+        etapas={etapas}
+        data="etapa"
+        updatedData={updatedData}
+      />
 
       <ModalEtapa
         updatedEtapaList={updateEtapa}

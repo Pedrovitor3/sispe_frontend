@@ -42,7 +42,7 @@ const ModalAndamento = ({
 
   useEffect(() => {
     loadingMeta();
-  }, [id && openModal]);
+  }, [openModal]);
 
   const loadingMeta = async () => {
     if (id) {

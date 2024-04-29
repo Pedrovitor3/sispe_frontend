@@ -27,7 +27,7 @@
 
 /* CARD   */
 .ant-card-body{
-  padding: 18px !important;
+  padding: 15px 25px  !important;
 }
 
 
@@ -69,13 +69,6 @@
   visibility: hidden;
 }
 
-.icon-wrapper-etapa{
-  font-size: 12px;
-  margin-left: 10px;
-  position: absolute;
-  right: 5px;
-  bottom: 15px;
-}
 
 
 .container-body-card:hover .icon-wrapper-objetivo{

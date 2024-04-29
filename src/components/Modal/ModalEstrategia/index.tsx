@@ -51,7 +51,7 @@ const ModalEstrategia = ({
   useEffect(() => {
     loadingEstrategia();
     loadingAllEstrategias();
-  }, [id && openModal]);
+  }, [openModal]);
 
   useEffect(() => {
     form.setFieldsValue({ objetivo: objetivoId });

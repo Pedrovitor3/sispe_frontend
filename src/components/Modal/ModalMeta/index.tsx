@@ -44,7 +44,7 @@ const ModalMeta = ({
 
   useEffect(() => {
     loadingMeta();
-  }, [id && openModal]);
+  }, [openModal]);
 
   useEffect(() => {
     form.setFieldsValue({ iniciativa: iniciativaId });

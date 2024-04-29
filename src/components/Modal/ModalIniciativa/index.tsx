@@ -37,11 +37,15 @@ const ModalIniciativa = ({
         if (id) {
           submitUpdate();
         } else {
-          const newPosition =
-            iniciativas.length > 0
-              ? Math.max(...iniciativas.map((p: any) => p.item)) + 1
-              : 1;
-          formData.item = newPosition;
+          loadingAllIniciativas();
+
+          const lastPosition = iniciativas.reduce(
+            (maxPosition: any, ini: any) => {
+              return ini.item > maxPosition ? ini.item : maxPosition;
+            },
+            0,
+          );
+          formData.item = lastPosition + 1;
           submitCreate();
         }
         form.resetFields();
@@ -53,7 +57,7 @@ const ModalIniciativa = ({
   useEffect(() => {
     loadingIniciativa();
     loadingAllIniciativas();
-  }, [id && openModal]);
+  }, [openModal]);
 
   useEffect(() => {
     form.setFieldsValue({ estrategia: estrategiaId });
@@ -79,16 +83,19 @@ const ModalIniciativa = ({
     }
   };
   const loadingAllIniciativas = async () => {
-    await getIniciativa(`iniciativa`).then(res => {
-      if (res) {
-        const filterObj = res.data.filter((obj: any) => {
-          return obj.perspectiva === estrategiaId;
-        });
-        setIniciativas(filterObj);
-      } else {
-        message.error('Ocorreu um erro inesperado');
-      }
-    });
+    const res = await getIniciativa(`iniciativa`);
+    if (res) {
+      const iniData = res.data;
+      const filterIniciativa = iniData.filter((ini: any) => {
+        console.log('ini', iniData);
+        return ini?.estrategia && ini.estrategia?.id === estrategiaId;
+      });
+      console.log('res', filterIniciativa);
+      console.log('estrategiaId', estrategiaId);
+      setIniciativas(filterIniciativa);
+    } else {
+      message.error('Ocorreu um erro inesperado');
+    }
   };
 
   const submitCreate = async () => {

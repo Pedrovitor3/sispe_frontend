@@ -22,12 +22,13 @@
   padding: 10px;
   background-color: #f4f4f4;
   border-radius: 6px;
-  min-width: 250px;
+  min-width: 310px;
   position: relative;
 }
 
 .andamento-title {
   font-size: 20px;
+  font-weight: 600;
   text-align: center;
   margin-bottom: 25px;
   color: rgba(17, 16, 16, 0.918);
@@ -43,12 +44,13 @@
   font-size: 22px;
   text-align: center;
   margin-bottom: 25px;
+
   color: rgba(17, 16, 16, 0.918);
 }
 
 /* Estilos para as cards */
 .card-etapa {
-  padding: 10px;
+  padding: 18px 5px;
   margin-bottom: 10px !important;
   background-color: #fff;
   border-radius: 4px;
@@ -57,10 +59,21 @@
 }
 
 .card-title {
-  font-size: 16px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: 500;
+  font-size: 15px;
   margin: 0px 0px 5px 5px;
   color: black;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 280px;
+  width: 98%;
 }
 
-
-
+.icon-wrapper-etapa{
+  font-size: 12px;
+  margin-left: 10px;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}

@@ -51,7 +51,7 @@ const ModalObjetivo = ({
   useEffect(() => {
     loadingObjetivo();
     loadingAllObjetivos();
-  }, [id && openModal]);
+  }, [openModal]);
 
   useEffect(() => {
     form.setFieldsValue({ perspectiva: perspectivaId });

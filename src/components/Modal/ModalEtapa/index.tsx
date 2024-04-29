@@ -54,7 +54,7 @@ const ModalEtapa = ({
   useEffect(() => {
     loadingMeta();
     loadingAndamento();
-  }, [id && openModal]);
+  }, [openModal]);
 
   const loadingMeta = async () => {
     if (id) {

@@ -3,17 +3,22 @@ import {
   deleteResponsavel,
   getResponsavel,
 } from '../../hooks/services/axios/responsavelService';
-import KanbamList from '../../components/Kanbam';
 import { getAcao } from '../../hooks/services/axios/acaoService';
 import { Dropdown, MenuProps, Popconfirm, Space, Table } from 'antd';
-import { DownOutlined, PlusOutlined } from '@ant-design/icons';
+import { DownOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
 import ModalResponsveis from '../../components/Modal/ModalResponsaveis';
 
+type ResponsavelData = {
+  id: string;
+  name: string;
+  cargo: string;
+  acao: any;
+};
 export default function Responsaveis() {
-  const [responsaveis, setResponsaveis] = useState<any>([]);
   const [acoes, setAcoes] = useState<any>([]);
 
+  const [responsaveis, setResponsaveis] = useState<ResponsavelData[]>([]);
   const [recordResponsavel, setRecordResponsavel] = useState<any>({});
   const [showResponsavelModal, setShowResponsavelModal] =
     useState<boolean>(false);
@@ -23,16 +28,30 @@ export default function Responsaveis() {
     loadingAcoes();
   }, []);
 
+  const updateResponsaveisList = (newResp: any) => {
+    console.log('resp', newResp);
+    console.log('responsavel', responsaveis);
+
+    setResponsaveis(prevResp => [...prevResp, newResp]);
+    console.log('responsavel 2', responsaveis);
+
+    loadingResponsaveis();
+  };
+
+  const hideModal = () => {
+    setShowResponsavelModal(false);
+    setRecordResponsavel(null);
+  };
+
   const loadingResponsaveis = async () => {
-    await getResponsavel('responsavel/').then((res: any) => {
-      if (res) {
-        setResponsaveis(res.data);
-      }
-    });
+    const res = await getResponsavel('responsavel');
+    if (res) {
+      setResponsaveis(res.data);
+    }
   };
 
   const loadingAcoes = async () => {
-    await getAcao('acao/').then((res: any) => {
+    await getAcao('acao').then((res: any) => {
       if (res) {
         setAcoes(res.data);
       }
@@ -83,14 +102,14 @@ export default function Responsaveis() {
     );
   };
   const handleMenuClickResponsavel: MenuProps['onClick'] = e => {
-    if (e.key === '2') {
+    if (e.key === '1') {
       setShowResponsavelModal(true);
     }
   };
 
   const columns: ColumnsType<any> = [
     {
-      title: 'Responável',
+      title: 'Responsavel',
       dataIndex: 'name',
     },
     {
@@ -104,6 +123,13 @@ export default function Responsaveis() {
               menu={{
                 items: [
                   {
+                    label: 'Alterar',
+                    key: '1',
+                    onClick: () => {
+                      setRecordResponsavel(record);
+                    },
+                  },
+                  {
                     label: (
                       <Popconfirm
                         title="Tem certeza de que deseja desabilitar este registro?"
@@ -112,27 +138,8 @@ export default function Responsaveis() {
                         Excluir
                       </Popconfirm>
                     ),
-                    key: '1',
-                    danger: true,
-                  },
-                  {
-                    label: 'Alterar',
                     key: '2',
-                    onClick: () => {
-                      setRecordResponsavel(record);
-                    },
-                  },
-                  {
-                    label: (
-                      <Space style={{ color: ' rgb(0, 21, 42)' }}>
-                        <PlusOutlined style={{ color: 'rgb(0, 21, 42)' }} />
-                        Iniciativa
-                      </Space>
-                    ),
-                    key: '3',
-                    onClick: () => {
-                      setRecordResponsavel(record);
-                    },
+                    danger: true,
                   },
                 ],
                 onClick: handleMenuClickResponsavel,
@@ -150,17 +157,6 @@ export default function Responsaveis() {
       },
     },
   ];
-
-  const updateResponsaveisList = (resp: any) => {
-    setResponsaveis((prevResp: any) => [...prevResp, resp]);
-    loadingResponsaveis();
-  };
-
-  const hideModal = () => {
-    setShowResponsavelModal(false);
-
-    setRecordResponsavel(null);
-  };
 
   return (
     <>

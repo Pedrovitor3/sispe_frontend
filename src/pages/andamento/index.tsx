@@ -45,6 +45,11 @@ export default function Andamento() {
     loadingAndamento();
   };
 
+  const updatedData = () => {
+    loadingAndamento();
+    loadingEtapa();
+  };
+
   const loadingEtapa = async () => {
     const res = await getEtapa('etapa');
     if (res) {
@@ -134,7 +139,12 @@ export default function Andamento() {
       >
         Novo Andamento
       </Button>
-      <KanbamList andamentos={andamentos} etapas={etapas} />
+      <KanbamList
+        andamentos={andamentos}
+        etapas={etapas}
+        data="andamento"
+        updatedData={updatedData}
+      />
 
       <ModalAndamento
         updatedAndamentoList={updateAndamento}
