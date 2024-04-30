@@ -29,7 +29,6 @@ export default function Responsaveis() {
   }, []);
 
   const updateResponsaveisList = (newResp: any) => {
-    setResponsaveis(prevResp => [...prevResp, newResp]);
     loadingResponsaveis();
   };
 
