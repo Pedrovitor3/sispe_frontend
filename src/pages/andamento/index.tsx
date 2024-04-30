@@ -1,14 +1,12 @@
 import React from 'react';
-import { Button, Dropdown, Popconfirm, Space } from 'antd';
+import { Button } from 'antd';
 import { useEffect, useState } from 'react';
 import { getEtapa } from '../../hooks/services/axios/etapaService';
-import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import ModalAndamento from '../../components/Modal/ModalAndamento';
 import {
   deleteAndamento,
   getAndamento,
 } from '../../hooks/services/axios/andamentoService';
-import AndamentoList from '../../components/Kanbam';
 import KanbamList from '../../components/Kanbam';
 import '../index.css';
 

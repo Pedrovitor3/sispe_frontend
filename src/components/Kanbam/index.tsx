@@ -209,7 +209,6 @@ const KanbamList = ({ andamentos, etapas, data, updatedData }: Props) => {
                               {renderMenuEtapa(etapa)}
                             </span>
                           )}
-
                           {etapa.name}
                         </p>
                       </Space>

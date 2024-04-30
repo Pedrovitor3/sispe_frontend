@@ -1,99 +1,83 @@
-/*     CARD  */
-.card-list{
-  width: 100%;
-  position: relative;
-}
-
-
-/*  KANBAM    */
-
+/* Estilo para o fundo do componente */
 .body-kanbam {
   margin: 0;
-  padding: 0;
+  padding: 20px;
   display: flex;
-  justify-content: space-around;
-  padding: 0px;
-  font-family: "Helvetica Neue", Arial, sans-serif;
-}
-
-.andamento-container {
-  flex: 1;
-  margin: 0px 5px;
-  padding: 10px;
-  background-color: #f4f4f4;
-  border-radius: 6px;
-  min-width: 310px;
-  position: relative;
-}
-
-.andamento-title {
-  font-size: 20px;
-  font-weight: 600;
-  text-align: center;
-  margin-bottom: 25px;
-  color: rgba(17, 16, 16, 0.918);
-}
-
-.andamento-header {
-  display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   justify-content: space-between;
 }
 
-.stage-cards {
-  font-size: 22px;
-  text-align: center;
-  margin-bottom: 25px;
-
-  color: rgba(17, 16, 16, 0.918);
-}
-
-/* Estilos para as cards */
-.card-etapa {
-  padding: 18px 5px;
-  margin-bottom: 10px !important;
+/* Estilo para os contêineres de andamento */
+.andamento-container {
+  flex: 1;
+  margin: 0 10px 20px;
+  padding: 20px;
   background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  min-width: 300px;
+  transition: transform 0.3s ease;
+}
+
+.andamento-container:hover {
+  transform: translateY(-5px);
+}
+
+/* Estilo para o título do andamento */
+.andamento-title {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Estilo para os cartões de etapa */
+.card-etapa {
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: #f9f9f9;
   border-radius: 4px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
 }
 
+.card-etapa:hover {
+  transform: translateY(-3px);
+}
+
+/* Estilo para o título do cartão de etapa */
 .card-title {
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-weight: 500;
-  font-size: 15px;
-  margin: 0px 0px 5px 5px;
-  color: black;
-  text-overflow: ellipsis;
+  font-size: 16px;
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 10px;
+  max-width: 330px;
   overflow: hidden;
-  max-width: 280px;
-  width: 98%;
+  text-overflow: ellipsis;
 }
 
+
+/* Estilo para os ícones de ação */
 .icon-wrapper-andamento{
-  font-size: 12px;
-  margin-left: 10px;
+  font-size: 20px;
   position: absolute;
-  right: 5px;
-  top: 5px;
-
-  visibility: hidden;
+  top: 10px;
+  right: 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-.icon-wrapper-etapa{
-  font-size: 12px;
-  margin-left: 10px;
+.icon-wrapper-etapa {
+  font-size: 14px;
   position: absolute;
-  right: 5px;
-  top: 5px;
-
-  visibility: hidden;
+  top: 10px;
+  right: 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-.andamento-container:hover .icon-wrapper-andamento {
-  visibility: visible;
-}
-
-.card-etapa:hover .icon-wrapper-etapa{
-  visibility: visible;
+.andamento-container:hover .icon-wrapper-andamento,
+.card-etapa:hover .icon-wrapper-etapa {
+  opacity: 1;
 }
