@@ -221,6 +221,7 @@ const KanbamList = ({ andamentos, etapas, data, updatedData }: Props) => {
           <div>Você não tem nenhum andamento, comece a criar</div>
         )}
       </div>
+
       <ModalAndamento
         updatedAndamentoList={updateEtapa}
         id={recordAndamento?.id}

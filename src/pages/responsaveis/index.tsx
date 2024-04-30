@@ -4,7 +4,7 @@ import {
   getResponsavel,
 } from '../../hooks/services/axios/responsavelService';
 import { getAcao } from '../../hooks/services/axios/acaoService';
-import { Dropdown, MenuProps, Popconfirm, Space, Table } from 'antd';
+import { Button, Dropdown, MenuProps, Popconfirm, Space, Table } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
 import ModalResponsveis from '../../components/Modal/ModalResponsaveis';
@@ -16,12 +16,12 @@ type ResponsavelData = {
   acao: any;
 };
 export default function Responsaveis() {
-  const [acoes, setAcoes] = useState<any>([]);
-
   const [responsaveis, setResponsaveis] = useState<ResponsavelData[]>([]);
   const [recordResponsavel, setRecordResponsavel] = useState<any>({});
   const [showResponsavelModal, setShowResponsavelModal] =
     useState<boolean>(false);
+
+  const [acoes, setAcoes] = useState<any>([]);
 
   useEffect(() => {
     loadingResponsaveis();
@@ -29,12 +29,7 @@ export default function Responsaveis() {
   }, []);
 
   const updateResponsaveisList = (newResp: any) => {
-    console.log('resp', newResp);
-    console.log('responsavel', responsaveis);
-
     setResponsaveis(prevResp => [...prevResp, newResp]);
-    console.log('responsavel 2', responsaveis);
-
     loadingResponsaveis();
   };
 
@@ -44,9 +39,10 @@ export default function Responsaveis() {
   };
 
   const loadingResponsaveis = async () => {
-    const res = await getResponsavel('responsavel');
-    if (res) {
-      setResponsaveis(res.data);
+    const resData = await getResponsavel('responsavel');
+    if (resData) {
+      const responsavelData = resData.data;
+      setResponsaveis(responsavelData);
     }
   };
 
@@ -64,6 +60,10 @@ export default function Responsaveis() {
     newData.splice(respId, -1);
     setResponsaveis(newData);
     loadingResponsaveis();
+  };
+
+  const handleOpenPerspectivaModal = async () => {
+    setShowResponsavelModal(true);
   };
 
   const expandedRowRender = (record: any) => {
@@ -107,7 +107,7 @@ export default function Responsaveis() {
     }
   };
 
-  const columns: ColumnsType<any> = [
+  const columns: ColumnsType<ResponsavelData> = [
     {
       title: 'Responsavel',
       dataIndex: 'name',
@@ -160,6 +160,13 @@ export default function Responsaveis() {
 
   return (
     <>
+      <Button
+        className="button-criar"
+        type="primary"
+        onClick={handleOpenPerspectivaModal}
+      >
+        Nova Perspectiva
+      </Button>
       <Table
         rowKey={record => record.id}
         columns={columns}
