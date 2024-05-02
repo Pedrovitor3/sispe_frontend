@@ -3,7 +3,9 @@
   font-family: "Helvetica Neue", Arial, sans-serif;
 }
 
-      /* Buttons */
+
+
+/* Buttons */
 .button-criar {
   margin: 0px 8px 10px 5px;
   background-color: rgb(0, 21, 42)  !important ;
@@ -31,7 +33,7 @@
 }
 
 .objetivo-title{
-  font-size: 15px;
+  font-size: 14px;
   font-family: Arial, Helvetica, sans-serif;
   line-height: 2;
   color: rgba(36, 34, 34, 0.733);

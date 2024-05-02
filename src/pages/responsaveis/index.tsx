@@ -15,13 +15,14 @@ type ResponsavelData = {
   cargo: string;
   acao: any;
 };
+
 export default function Responsaveis() {
+  const [acoes, setAcoes] = useState<any>([]);
+
   const [responsaveis, setResponsaveis] = useState<ResponsavelData[]>([]);
   const [recordResponsavel, setRecordResponsavel] = useState<any>({});
   const [showResponsavelModal, setShowResponsavelModal] =
     useState<boolean>(false);
-
-  const [acoes, setAcoes] = useState<any>([]);
 
   useEffect(() => {
     loadingResponsaveis();

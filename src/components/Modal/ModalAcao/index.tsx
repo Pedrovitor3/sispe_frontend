@@ -1,6 +1,7 @@
 import {
   Button,
   Col,
+  DatePicker,
   Form,
   Input,
   Modal,
@@ -309,16 +310,24 @@ const ModalAcao = ({
           </Row>
           <Row gutter={30}>
             <Col offset={1} span={5}>
-              <DateFormItem name="inicioPrevisto" label="Início Previsto" />
+              <Form.Item name="inicioPrevisto" label="Início Previsto">
+                <DatePicker.MonthPicker />
+              </Form.Item>
             </Col>
             <Col span={5}>
-              <DateFormItem name="terminoPrevisto" label="Término Previsto" />
+              <Form.Item name="terminoPrevisto" label="Término Previsto">
+                <DatePicker.MonthPicker />
+              </Form.Item>
             </Col>
             <Col offset={2} span={5}>
-              <DateFormItem name="inicioReal" label="Início real" />
+              <Form.Item name="inicioReal" label="Início real">
+                <DatePicker.MonthPicker />
+              </Form.Item>
             </Col>
             <Col span={5}>
-              <DateFormItem name="terminoReal" label="Término real" />
+              <Form.Item name="terminoReal" label="Término real">
+                <DatePicker.MonthPicker />
+              </Form.Item>
             </Col>
           </Row>
           <Row gutter={0}>

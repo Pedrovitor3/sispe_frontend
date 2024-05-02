@@ -104,18 +104,6 @@ const KanbamList = ({ andamentos, etapas, data, updatedData }: Props) => {
                 key: '2',
                 danger: true,
               },
-              {
-                label: (
-                  <Space style={{ color: ' rgb(0, 21, 42)' }}>
-                    <PlusOutlined style={{ color: 'rgb(0, 21, 42)' }} />
-                    Objetivo
-                  </Space>
-                ),
-                key: '3',
-                onClick: () => {
-                  setRecordEtapa(record);
-                },
-              },
             ],
             onClick: handleMenuClickEtapa,
           }}
