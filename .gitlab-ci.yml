@@ -3,7 +3,7 @@ cache:
     - node_modules/
 
 variables:
-  APP_NAME: sisbgview
+  APP_NAME: cpesview
   DOCKER_HOST: tcp://docker:2375
   DOCKER_DRIVER: overlay2
 

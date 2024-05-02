@@ -1,8 +1,8 @@
-export const sistemaNameSSO = 'SISBGPC';
-export const sistemaDescricao = 'Sistema para geração do Boletim Geral';
+export const sistemaNameSSO = 'CPES';
+export const sistemaDescricao = 'Sistema para conferência plano estratégico';
 export const sistemaVersao = '1.0.0-00';
-export const domainNameProd = 'sisbg.policiacivil.go.gov.br/';
-export const domainNameHomo = 'sisbg-homo.policiacivil.go.gov.br/';
+export const domainNameProd = 'cpes.policiacivil.go.gov.br/';
+export const domainNameHomo = 'cpes-homo.policiacivil.go.gov.br/';
 
 export const domainNameDesv = 'localhost';
 
